@@ -1,0 +1,18 @@
+#include<cstdio>
+using namespace std;
+const int maxn= 2e6;
+int i,n;
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d",&n);
+	if (n<9) printf("0");
+	else if (n==9) printf("1");
+	else {
+		printf("9");
+		for (i= 1;i<=n-10;i++)
+			printf("0");
+	}
+	return 0;
+}	

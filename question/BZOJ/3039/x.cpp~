@@ -1,0 +1,59 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+const int maxn= 2000;
+int b[maxn][maxn],high[2][maxn];
+int left[2][maxn],right[2][maxn];
+int ll[2][maxn],rr[2][maxn];
+char ch;
+int ans,n,m,s,i,j,x,y,ba,bb;
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d %d\n",&n, &m);
+	for (i= 1;i<=n;i++)
+		for (j= 1;j<=m;j++){
+			do scanf("%c",&ch);
+			while (ch!='F'&&ch!='R');
+			if (ch=='R') b[i][j]= 1;
+		}	
+	for (i= 1;i<=m;i++)
+		left[0][i]= 0,right[0][i]= m+1,b[0][i]= 1;
+	for (i= 1;i<=n;i++){
+		ba= (i-1)&1;bb= i&1;
+		memset(ll[bb],0,sizeof(ll[bb]));
+		memset(rr[bb],0,sizeof(rr[bb]));
+		memset(left[bb],0,sizeof(left[bb]));
+		memset(right[bb],0,sizeof(right[bb]));
+		memset(high[bb],0,sizeof(high[bb]));		
+		ll[bb][0]= 0;rr[bb][m+1]= m+1;
+		for (j= 1;j<=m;j++){
+			ll[bb][j]= ll[bb][j-1];
+			if (b[i][j]){
+				ll[bb][j]= j;
+				high[bb][j]= 0;
+				left[bb][j]= 0;
+			}else {
+				high[bb][j]= high[ba][j]+1;
+				left[bb][j]= max(ll[bb][j],left[ba][j]);
+			}
+		}
+		for (j= m;j>0;j--){
+			rr[bb][j]= rr[bb][j+1];
+			if (b[i][j]){
+				right[bb][j]= m+1;
+				rr[bb][j]= j;
+			}
+			else 
+				right[bb][j]= min(rr[bb][j],right[ba][j]);
+		}
+		for (j= 1;j<=m;j++)
+			if (right[bb][j]>left[bb][j])
+			ans= max(ans,(right[bb][j]-left[bb][j]-1)*high[bb][j]);
+	}
+	printf("%d\n",3*ans);
+	return 0;
+}

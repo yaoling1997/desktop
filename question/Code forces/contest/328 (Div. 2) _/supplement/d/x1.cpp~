@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+vector<int> G[123458];
+int vis[123458], ans, Max, d[123458];
+int dfs(int i, int p){
+    d[i]=d[p]+1;
+    int c=0;
+    if(vis[i]) c=1;
+    for(int j=0; j<G[i].size(); j++){
+        if(G[i][j]!=p)c+=dfs(G[i][j],i);
+    }
+    if(c>0)ans++;
+    return c;
+}
+int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int n, m, u, v, idx, idxs;
+    cin >> n >> m;
+    for(int i=1; i<=n-1; i++){
+        cin >> u >> v;
+        G[u].push_back(v);
+        G[v].push_back(u);
+    }
+    for(int i=0; i<m; i++){
+        cin >> u;
+        vis[u]=1;
+    }
+    dfs(1,0);
+    for(int i=1; i<=n; i++){
+        if(d[i]>Max&&vis[i]){
+            Max = d[i];
+            idx = i;
+        }
+    }
+    ans=0;
+    Max=0;
+    dfs(idx,0);
+    for(int i=1; i<=n; i++){
+        if(d[i]>Max&&vis[i]){
+            Max=d[i];
+            idxs=i;
+        }
+    }
+    cout << min(idx,idxs) << '\n';
+    cout << 2*ans-1-Max;
+}

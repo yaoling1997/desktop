@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<queue>
+#include<cmath>
+#include<sys/timeb.h>
+#define ll long long
+using namespace std;
+int a,b,m,d,n,i;
+int R(int o){
+	return rand()%o;
+}
+int main()
+{
+	freopen("1.in","w",stdout);
+	struct timeb t;ftime(&t);
+	srand(t.time*1000+t.millitm);
+	m= R(5)+1;d= R(10);
+	printf("%d %d\n",m, d);
+	n= R(5)+1;
+	a= R(9)+1;
+	b= R(9)+1;
+	for (i= 2;i<=n;i++){
+		a= a*10+R(10);
+		b= b*10+R(10);
+	}
+	if (a>b) swap(a,b);
+	printf("%d\n%d",a, b);
+}

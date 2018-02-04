@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+#include <cstring>
+#include <set>
+#include <map>
+#include <queue>
+#include <deque>
+#include <stack>
+#include <vector>
+#include <ctime>
+#include <cassert>
+#include <cmath>
+#include <iomanip>
+#include <algorithm>
+#include <iomanip>
+#include <fstream>
+using namespace std;
+#define fname ""
+#define F first
+#define S second
+#define pb push_back
+#define mp make_pair
+#define ll long long
+#define ull unsigned long long
+#define inf 1000000000
+#define INF 1000000000000000000ll
+const int N = 200500, mod = inf + 7;
+int val[N], n = 1, m;
+
+ll d[N];
+vector <int> a[N];
+
+ll calc(int v) {
+	d[v] = val[v];
+	for (int i = 0; i < (int)a[v].size(); ++ i) {
+		int to = a[v][i];
+		d[v] += calc(to);
+	}
+	d[v] *= ((int)a[v].size() + 1);
+	d[v] %= mod;
+	return d[v];	
+}
+
+int main() {
+	freopen("1.in", "r", stdin);
+	freopen("2.out", "w", stdout);
+	scanf("%d%d", &val[1], &m);
+
+	while(m--) {
+		int type;
+		scanf("%d", &type);
+		if (type == 1) {
+			int x;
+			scanf("%d", &x);
+			a[x].pb(++n);
+			scanf("%d", &val[n]);
+		}
+		else {
+			int x;
+			scanf("%d", &x);
+//			printf("%lld\n", calc(x));
+			printf("%I64d\n", calc(x));
+		}
+	}
+
+
+	return 0;
+}

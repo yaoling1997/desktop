@@ -1,0 +1,13 @@
+我果然是数学渣
+V1= Vs*cos(wt)
+V2= Vr*cos(wt+q)
+V2= i*R
+i= C*d/dt(V1-V2)
+已知Vs,R,C,W求Vr
+一看有三个未知数,好像不能求
+但是wt是可以任意取值的
+令wt+q=0
+解得sinq=Vr/(Vs*R*C*W)
+令wt=0
+解得tanq=q/(R*C*W)
+利用(sinq)^2+(cosq)^2=1

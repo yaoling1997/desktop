@@ -1,0 +1,32 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<sys/timeb.h>
+using namespace std;
+const int maxn= 3001;
+int a[maxn];
+int i,j,x,y,n,T;
+int random(int o){return rand()%o;}
+int main()
+{
+	freopen("1.in","w",stdout);
+	struct timeb t;ftime(&t);
+	srand(t.time*1000+t.millitm);
+	T= random(5)+1;
+	printf("%d\n",T);
+	for (int a1= 1;a1<=T;a1++){
+		n= random(10)+1;
+		printf("%d\n",n);
+		for (i= 1;i<=n;i++)	a[i]= i;
+		for (i= 1;i<=n;i++){
+			random_shuffle(a+1,a+n+1);
+			for (j= 1;j<=n;j++)	printf("%d ",a[j]);
+			printf("\n");
+		}
+		for (i= 1;i<=n;i++){
+			random_shuffle(a+1,a+n+1);
+			for (j= 1;j<=n;j++)	printf("%d ",a[j]);
+			printf("\n");
+		}		
+	}return 0;
+}

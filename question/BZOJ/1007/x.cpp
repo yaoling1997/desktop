@@ -1,0 +1,82 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn= 60001;
+const double eps= 1e-8;
+struct point{
+	double x,y;
+};
+typedef point vec;
+struct line{
+	point p;
+	vec v;int d;
+	double ang;
+};
+int dcmp(double x){
+	if (fabs(x)<eps) return 0;
+	return x<0 ? -1:1;
+}
+line l[maxn],q[maxn];
+point p[maxn];
+int i,n,m;
+double x,y;
+point a,b;
+vec operator +(vec a,vec b){a.x+= b.x;a.y+= b.y;return a;}
+vec operator -(vec a,vec b){a.x-= b.x;a.y-= b.y;return a;}
+vec operator *(double t,vec a){a.x*= t;a.y*= t;return a;}
+vec operator /(double t,vec a){a.x/= t;a.y/= t;return a;}
+bool operator ==(vec a,vec b){return !dcmp(a.x-b.x) && !dcmp(a.y-b.y);}
+bool operator <(vec a,vec b){return dcmp(a.x-b.x)<0 || (!dcmp(a.x-b.x) && dcmp(a.y-b.y)<0);}
+double cj(vec a,vec b){return a.x*b.y-a.y*b.x;}
+double dj(vec a,vec b){return a.x*b.x+a.y*b.y;}
+bool cmpl(line a,line b){return a.ang<b.ang;}
+bool cmpd(line a,line b){return a.d<b.d;}
+point jd(line a,line b){
+	vec u= a.p-b.p;
+	return a.p+cj(b.v,u)/cj(a.v,b.v)*a.v;
+}
+bool onleft(line a,point p){
+	return dcmp(cj(a.v,p-a.p))>0;
+}
+void hpi(){
+	sort(l+1,l+n+1,cmpl);
+	int first= 1,last= 1,i;
+	q[1]= l[1];
+	for (i= 2;i<=n;i++){
+		while (first<last && !onleft(l[i],p[last-1])) last--;
+		while (first<last && !onleft(l[i],p[first])) first++;
+		q[++last]= l[i];
+		if (!dcmp(cj(q[last].v,q[last-1].v))){
+			last--;
+			if (onleft(q[last],l[i].p)) q[last]= l[i];
+		}
+		if (first<last)
+			p[last-1]= jd(q[last],q[last-1]);
+	}
+	while (first<last && !onleft(q[first],p[last-1])) last--;
+	sort(q+first,q+last+1,cmpd);
+	for (i= first;i<=last;i++)
+		printf("%d ",q[i].d);
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d",&n);
+	for (i= 1;i<=n;i++){
+		scanf("%lf %lf",&x, &y);
+		if (!dcmp(x) && !dcmp(y)){
+			a.x= 0;a.y= 0;
+			b.x= 1;b.y= 0;
+		}
+		else {
+			a.x= 1;a.y= x+y;
+			b.x= 2;b.y= 2*x+y;
+		}
+		l[i].p= a;l[i].v= b-a;l[i].d= i;l[i].ang= atan(x);
+	}
+	hpi();
+	return 0;
+}

@@ -1,0 +1,234 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<cmath>
+#define ll long long
+using namespace std;
+const ll maxn= 3e6;
+ll X[maxn],Y[maxn];
+vector< vector<ll> > a,c;
+ll n,m,i,j,X0,X1,X2,Y0,Y1,Y2,x,xleaf,xo,L,R,L1,R1,ans,sum,T;
+ll gcd(ll a,ll b){
+	if (!b) return a;
+	return gcd(b,a%b);
+}
+void update(ll o){
+	a[xo][o]= gcd(a[xo][2*o],a[xo][2*o+1]);
+}
+void build1(ll o,ll l,ll r){
+	if (l+1<r){
+		ll mid= (l+r)>>1;
+		build1(2*o,l,mid);
+		build1(2*o+1,mid,r);
+		update(o);
+	}else {
+		if (xleaf){
+			ll x= xleaf,y= l,p= -1;
+			if ((x<X0&&y<Y0)||(x>=X0&&y>=Y0)) p= 1;
+			a[xo][o]= c[x][y]+c[x+1][y+1]-c[x][y+1]-c[x+1][y];
+			a[xo][o]*= p;
+		}else a[xo][o]= gcd(a[2*xo][o],a[2*xo+1][o]);
+	}
+}
+void build(ll o,ll l,ll r){
+	if (l+1<r){
+		ll mid= (l+r)>>1;
+		build(2*o,l,mid);
+		build(2*o+1,mid,r);
+		xleaf= 0;xo= o;
+		build1(1,L1,R1);
+	}else {
+		xleaf= l;xo= o;
+		build1(1,L1,R1);
+	}
+}
+void change1(ll o,ll l,ll r,ll y,ll v){
+	if (y<l||y>=r) return;
+	if (l+1<r){
+		ll mid= (l+r)>>1;
+		if (y<mid) change1(2*o,l,mid,y,v);
+		else change1(2*o+1,mid,r,y,v);
+		update(o);
+	}else {
+		if (xleaf) a[xo][o]+= v;
+		else a[xo][o]= gcd(a[2*xo][o],a[2*xo+1][o]);
+	}
+}
+void change(ll o,ll l,ll r,ll x,ll y,ll z){
+	if (x<l||x>=r) return;
+	if (l+1<r){
+		ll mid= (l+r)>>1;
+		if (x<mid) change(2*o,l,mid,x,y,z);
+		else change(2*o+1,mid,r,x,y,z);
+		xleaf= 0;xo= o;
+		change1(1,L1,R1,y,z);
+	}else {
+		xleaf= l;xo= o;
+		change1(1,L1,R1,y,z);
+	}
+}
+void ask1(ll o,ll l,ll r,ll x,ll y){
+	if (x<=l&&r<=y){
+		ans= gcd(ans,a[xo][o]);
+		return;
+	}
+	ll mid= (l+r)>>1;
+	if (x<mid) ask1(2*o,l,mid,x,y);
+	if (mid<y) ask1(2*o+1,mid,r,x,y);
+}
+void ask(ll o,ll l,ll r,ll x,ll y,ll X1,ll Y1){
+	if (x<=l&&r<=y){
+		xo= o;
+		ask1(1,L1,R1,X1,Y1);
+		return;
+	}
+	ll mid= (l+r)>>1;
+	if (x<mid) ask(2*o,l,mid,x,y,X1,Y1);
+	if (mid<y) ask(2*o+1,mid,r,x,y,X1,Y1);
+}
+void buildx(ll o,ll l,ll r){
+	if (l+1<r){
+		ll mid= (l+r)>>1;
+		buildx(2*o,l,mid);
+		buildx(2*o+1,mid,r);
+		X[o]= gcd(X[2*o],X[2*o+1]);
+	}else {
+		ll p= -1;
+		if (l<Y0) p= 1;
+		X[o]= c[X0][l]-c[X0][l+1];
+		X[o]*= p;
+	}
+}
+void buildy(ll o,ll l,ll r){
+	if (l+1<r){
+		ll mid= (l+r)>>1;
+		buildy(2*o,l,mid);
+		buildy(2*o+1,mid,r);
+		Y[o]= gcd(Y[2*o],Y[2*o+1]);
+	}else {
+		ll p= -1;
+		if (l<X0) p= 1;
+		Y[o]= c[l][Y0]-c[l+1][Y0];
+		Y[o]*= p;
+	}
+}
+void find(ll *a,ll o,ll l,ll r,ll x,ll y){
+	if (x<=l&&r<=y){
+		ans= gcd(ans,a[o]);
+		return;
+	}ll mid= (l+r)>>1;
+	if (x<mid) find(a,2*o,l,mid,x,y);
+	if (mid<y) find(a,2*o+1,mid,r,x,y);	
+}
+void change(ll *a,ll o,ll l,ll r,ll x,ll v){
+	if (x<l||x>=r) return;
+	if (l+1<r){
+		ll mid= (l+r)>>1;
+		if (x<mid) change(a,2*o,l,mid,x,v);
+		else change(a,2*o+1,mid,r,x,v);
+		a[o]= gcd(a[2*o],a[2*o+1]);
+	}else a[o]+= v;
+}
+void go(ll x,ll y,ll b,ll c){
+	if (x==X0&&y==Y0){
+	}else if (x==X0){
+		if (y<Y0&&(b==2||b==3)) c= -c;
+		else if (y>Y0&&(b==1||b==4)) c= -c;
+	}else if (y==Y0){
+		if (x<X0&&(b==3||b==4)) c= -c;
+		else if (x>X0&&(b==1||b==2)) c= -c;
+	}else {
+		ll p= -1;	
+		if ((x<X0&&y<Y0)||(x>=X0&&y>=Y0)) p= 1;
+		if (b==1||b==3) c= c*p;
+		else c= -c*p;
+	}
+	if (b==1)
+		change(1,L,R,x-1,y-1,c);
+	else if (b==2)
+		change(1,L,R,x-1,y,c);
+	else if (b==3)
+		change(1,L,R,x,y,c);
+	else if (b==4)
+		change(1,L,R,x,y-1,c);
+}
+void gox(ll y,ll c,ll b){
+	if (y<Y0){
+		if (b) change(X,1,L1,R1,y,c);
+		else change(X,1,L1,R1,y-1,-c);
+	}else if (y>Y0){
+		if (b) change(X,1,L1,R1,y,-c);
+		else change(X,1,L1,R1,y-1,c);
+	}else {
+		if (b) change(X,1,L1,R1,y,-c);
+		else change(X,1,L1,R1,y-1,-c);
+	}
+}
+void goy(ll x,ll c,ll b){
+	if (x<X0){
+		if (b) change(Y,1,L,R,x,c);
+		else change(Y,1,L,R,x-1,-c);
+	}else if (x>X0){
+		if (b) change(Y,1,L,R,x,-c);
+		else change(Y,1,L,R,x-1,c);
+	}else {
+		if (b) change(Y,1,L,R,x,-c);
+		else change(Y,1,L,R,x-1,-c);
+	}
+}
+void init(){
+	vector<ll> b(4*m,0);
+	for (i= 1;i<=2*n;i++) c.push_back(b);
+	for (i= 1;i<=4*n+1;i++) a.push_back(b);
+	L= 1;R= n;L1= 1;R1= m;
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%lld %lld",&n, &m);
+	n++;m++;
+	init();
+	scanf("%lld %lld",&X0, &Y0);
+	X0++;Y0++;
+	scanf("%lld",&T);
+	for (i= 2;i<=n;i++)
+		for (j= 2;j<=m;j++){
+			scanf("%lld",&c[i][j]);
+			if (i==X0&&j==Y0)
+				sum= c[i][j];
+		}
+	build(1,L,R);
+	buildx(1,L1,R1);
+	buildy(1,L,R);
+	for (ll a1= 1;a1<=T;a1++){
+		scanf("%lld %lld %lld %lld %lld",&x, &X1, &Y1, &X2, &Y2);
+		if (!x){
+			ans= sum;
+			if (Y1||Y2){
+				find(X,1,L1,R1,Y0-Y1,Y0+Y2);
+			}if (X1||X2){
+				find(Y,1,L,R,X0-X1,X0+X2);
+			}if ((X1||X2)&&(Y1||Y2)){
+				ask(1,L,R,X0-X1,X0+X2,Y0-Y1,Y0+Y2);
+			}printf("%lld\n",abs(ans));
+		}else {
+			X1++;Y1++;X2++;Y2++;
+			scanf("%lld",&x);
+			go(X1,Y1,1,x);
+			go(X1,Y2,2,x);
+			go(X2,Y2,3,x);
+			go(X2,Y1,4,x);
+			if (X1<=X0&&X0<=X2&&Y1<=Y0&&Y0<=Y2) sum+= x;
+			if (X1<=X0&&X0<=X2){
+				gox(Y1,x,0);
+				gox(Y2,x,1);
+			}if (Y1<=Y0&&Y0<=Y2){
+				goy(X1,x,0);
+				goy(X2,x,1);
+			}
+		}
+	}return 0;
+}

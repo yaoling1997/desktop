@@ -1,0 +1,73 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<queue>
+#include<cmath>
+#include<map>
+#define ll long long
+#define ull unsigned long long
+using namespace std;
+const int maxn= 2e6;
+map<ull,int> M;
+vector<char> A[maxn];
+queue<int> Q;
+char s[maxn],t[maxn];
+ull d[maxn];
+int f[maxn],p[maxn];
+ull B= 101,x;
+int n,m,i,j,len,num;
+char lc(char c){
+	if ('A'<=c&&c<='Z') c+= 'a'-'A';
+	return c;
+}
+void print(int o){
+	if (!o) return;
+	int len= A[p[o]].size(),i;	
+	print(o-len);
+	num++;
+	if (num!=1)	printf(" ");
+	for (i= 0;i<len;i++)
+		printf("%c",A[p[o]][i]);
+}
+int main()
+{
+	//freopen("1.in","r",stdin);
+	//freopen("1.out","w",stdout);
+	scanf("%d",&n);
+	scanf("%s",s+1);
+	d[0]= 1;
+	for (i= 1;i<=n;i++)
+		d[i]= d[i-1]*B;
+	scanf("%d",&m);
+	for (i= 1;i<=m;i++){
+		scanf("%s",t+1);
+		len= strlen(t+1);
+		x= 0;
+		for (j= 1;j<=len;j++){
+			A[i].push_back(t[j]);
+			x= x*B+(ull)(lc(t[len-j+1])-'a');
+		}
+		M[x]= i;
+	}
+	f[0]= 1;
+	Q.push(0);
+	while (!Q.empty()){
+		int u= Q.front();
+		Q.pop();
+		x= 0;
+		for (i= 1;i<=1000&&i+u<=n;i++){
+			x= x*B+(ull)(s[u+i]-'a');
+			if (!f[u+i]&&M.count(x)){
+				f[u+i]= 1;
+				p[u+i]= M[x];
+				Q.push(u+i);
+				if (u+i==n) break;
+			}
+		}
+		if (f[n]) break;
+	}
+	print(n);
+	return 0;
+}

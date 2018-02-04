@@ -1,0 +1,45 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+const int maxn= 501,mo= 1024523;
+int f[2][maxn][maxn];
+char u[maxn],d[maxn];
+bool U[maxn],D[maxn];
+int g,i,j,k,z,n,m,y,L1,L2;
+int main()
+{
+	freopen("ball.in","r",stdin);
+	freopen("ball.out","w",stdout);
+	scanf("%d %d",&n, &m);
+	scanf("%s",u+1);
+	scanf("%s",d+1);
+	for (i= 1;i<=n;i++) U[i]= u[i]=='A';
+	for (i= 1;i<=m;i++) D[i]= d[i]=='A';	
+	f[0][0][0]= 1;
+	reverse(U+1,U+n+1);
+	reverse(D+1,D+m+1);
+	for (i= 0;i<=n;i++){
+		y= (i-1)&1;		
+		for (j= 0;j<=m;j++){
+			if (i+j==0) continue;
+			g= i+j;L2= min(g,n);
+			for (k= max(0,g-m);k<=L2;k++){
+				z= g-k;
+				int &res= f[i&1][j][k]= 0;
+				if (i){
+					if (k&&U[i]==U[k]) res+= f[y][j][k-1];
+					if (z&&U[i]==D[z]) res+= f[y][j][k];
+				}if (j){
+					if (k&&D[j]==U[k]) res+= f[i&1][j-1][k-1];
+					if (z&&D[j]==D[z]) res+= f[i&1][j-1][k];
+				}
+				//res-= res/mo*mo;
+				while (res>mo) res-= mo;
+			}
+		}
+	}
+	printf("%d",f[n&1][m][n]);
+	return 0;
+}

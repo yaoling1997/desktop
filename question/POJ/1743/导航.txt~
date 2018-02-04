@@ -1,0 +1,19 @@
+题目大意就是求最长不重叠重复子串
+用后缀数组实现
+可以二分子串长度m
+然后从小到大扫排名
+Min表示扫到的最小的后缀下标
+Max表示扫到的最大的后缀下标
+Max和Min的初始值都是sa[1]
+若height[i]>=m,就用sa[i]更新Min,Max
+若Max-Min>=m
+表示后缀Max和后缀Min的lcp>=m且后缀Max和后缀Min无重叠部分
+若height[i]<m
+表示lcp(sa[i],和sa[i-1])<m
+则lcp(sa[i-1],sa[k])的lcp<m  (k>=i)
+要新开一段
+令Max= Min= sa[i]
+重复上述过程
+根据题意
+还要先用数组的每一项与前一项做差
+

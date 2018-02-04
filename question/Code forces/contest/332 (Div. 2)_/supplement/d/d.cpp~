@@ -1,0 +1,35 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<queue>
+#include<cmath>
+#define ll long long
+using namespace std;
+const ll maxn= 1e5;
+ll ans[maxn][2];
+ll i,n,m,x,la,M,cnt;
+ll count(ll n){
+	return (6*x+n*n*n-1)/3/n/(n+1);
+}
+int main()
+{
+	scanf("%lld",&x);
+	M= sqrt(6*x)+1e-8;
+	for (n= 1;n<=M;n++){
+		m= count(n);
+		if (m<n) break;
+		if (n==m) cnt++;
+		la++;
+		ans[la][0]= n;
+		ans[la][1]= m;
+	}
+	printf("%lld\n",2*la-cnt);
+	for (i= 1;i<=la;i++)
+		printf("%lld %lld\n",ans[i][0], ans[i][1]);
+	for (i= la;i>0;i--){
+		if (ans[i][0]==ans[i][1]) continue;
+		printf("%lld %lld\n",ans[i][1], ans[i][0]);		
+	}return 0;
+}

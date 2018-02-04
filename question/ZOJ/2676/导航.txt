@@ -1,0 +1,37 @@
+做的有关分数规划的第一道题目
+搞了半天自己连求出最小割后随便输出一组解都不会...
+若已经求出了最小割
+从s开始dfs
+只走没满流的边
+dfs到的点都属于S集合
+然后再枚举每条边
+若这条边连接的两个点一个在S中,一个在T中
+那么他就是我们随便找的割的一条边
+这道题目是要求
+numda=f(x)=sigma wi/k (i属于1到k)
+使numda最小
+然后X可以看成m维向量(x1,x2...xm)
+xi为1表示第i条边要取
+0表示不取
+设a为m维向量(a1,a2...am)
+ai表示第i条边的权值
+令c为m维向量(1,1,1...1)
+那么上面的式子可以写成
+numda=f(x)=a*x/c*x=a(x)/b(x)
+g(numda)=min{a(x)-numda*b(x)}
+g(numda)=min{a*x-numda*c*x}
+g(numda)=min{(a-numda*c)*x}
+g(numda)=min{sigmawi-numda} (i属于1到k)
+numda>ans g(numda)<0
+numda<ans g(numda)>0
+然后二分numda
+以wi-numda为边权建图
+若wi-numda<0那么肯定要取
+不需要加到新图里
+然后对新图跑网络流求最小割即可
+记得是权值是实数
+记得找割时一定要先从s dfs
+标记能够dfs到的点
+再枚举边
+边的两个点分别属于S和T两个集合
+那么它是最小割的某条被割的边

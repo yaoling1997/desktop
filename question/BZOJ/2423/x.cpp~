@@ -1,0 +1,47 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#define ll long long
+using namespace std;
+const int mo= 1e8;
+const int maxn= 5005;
+int f[maxn][maxn],sum[maxn][maxn];
+char a[maxn],b[maxn];
+int i,j,lena,lenb;
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%s",a+1);
+	scanf("%s",b+1);
+	lena= strlen(a+1);
+	lenb= strlen(b+1);
+	a[lena--]= '\0';
+	b[lenb--]= '\0';
+	for (i=0;i<=lena;i++) sum[i][0]= 1;
+	for (i= 0;i<=lenb;i++) sum[0][i]= 1;
+	for (i= 1;i<=lena;i++)
+		for (j= 1;j<=lenb;j++){
+			if (a[i]==b[j]){
+				f[i][j]= f[i-1][j-1]+1;
+				if (f[i-1][j-1])
+					sum[i][j]= sum[i-1][j-1];
+				else sum[i][j]= 1;
+				if (f[i-1][j]==f[i][j])
+					sum[i][j]= (sum[i][j]+sum[i-1][j])%mo;
+				if (f[i][j-1]==f[i][j])
+					sum[i][j]= (sum[i][j]+sum[i][j-1])%mo;
+			}else {
+				f[i][j]= max(f[i-1][j],f[i][j-1]);
+				if (f[i-1][j]==f[i][j])
+					sum[i][j]= (sum[i][j]+sum[i-1][j])%mo;
+				if (f[i][j-1]==f[i][j])
+					sum[i][j]= (sum[i][j]+sum[i][j-1])%mo;
+				if (f[i-1][j-1]==f[i][j])
+					sum[i][j]-= sum[i-1][j-1];
+			}
+		}
+	printf("%d\n%d",f[lena][lenb],sum[lena][lenb]);
+	return 0;
+}

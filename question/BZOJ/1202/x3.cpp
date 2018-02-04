@@ -1,0 +1,35 @@
+#include<cstdio>
+#define rep(i,n) for(int i=0;i<n;i++)
+using namespace std;
+const int maxn=100;
+int n,m,F[maxn],G[maxn];
+int Find(int x)
+{
+if(x==F[x])return x;
+Find(F[x]);G[x]+=G[F[x]];return F[x]=F[F[x]];
+}
+void solve()
+{
+int s,t,v;
+scanf("%d %d",&n,&m);
+rep(i,n+1)F[i]=i,G[i]=0;
+bool Right=1;
+while(m--)
+{
+scanf("%d %d %d",&s,&t,&v);--s;
+int i=Find(s),j=Find(t),a=G[s],b=G[t];
+if(i!=j)
+{
+F[i]=j;
+G[i]=b-a-v;
+}
+else if(b-a!=v)Right=false;
+}
+Right?puts("true"):puts("false");
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("2.out","w",stdout);
+int t;scanf("%d",&t);while(t--)solve();
+}

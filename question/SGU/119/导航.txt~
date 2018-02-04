@@ -1,0 +1,11 @@
+证明若任意x,y (A0x+B0y)%N=0则(Ax+By)%N=0
+当且仅当A=A0i,B=B0i
+充分性
+若任意x,y (A0x+B0y)%N=0
+则(Ax+By)%N=(i*A0x+i*B0y)%N=0
+必要性
+(A0x+B0y)%N=0
+(iA0x+iB0y)%N=0
+(Ax+By)%N=0
+则((A-iA0)x+(B-iB0)y)%N=0
+所以A=iA0,B=iB0(感觉有点牵强)

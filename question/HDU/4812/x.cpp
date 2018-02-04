@@ -1,0 +1,153 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#define ll long long
+using namespace std;
+const int maxn= 3e5,mo= 1e6+3,oo= 1e9,main_stack=16;
+struct node{
+	int v,pre;
+};
+vector<int> g[maxn];
+vector<node> H[mo+10];
+//char my_stack[128<<20];
+int sta[maxn],ans[2];
+int inv[mo+10],c[maxn],b[maxn],vis[maxn];
+int n,x,y,z,i,j,k,K,bl,tim,sz,now,cnt,bc,la;
+void ex_gcd(int a,int b,int &x,int &y){
+	if (!b){
+		x= 1;y= 0;
+		return;
+	}
+	ex_gcd(b,a%b,x,y);
+	int t= x;
+	x= y;
+	y= t-a/b*y;
+}
+void get_ans(int x,int y){
+	if (x>y) swap(x,y);
+	int bl= 0;
+	if (!ans[0]) bl= 1;
+	else if (ans[0]>x||(ans[0]==x&&ans[1]>y)) bl= 1;
+	if (bl) ans[0]= x,ans[1]= y;
+}
+void get_sz(int o,int fa){
+	sz++;
+	int len= g[o].size(),i;
+	for (i= 0;i<len;i++){
+		int v= g[o][i];
+		if (v==fa||b[v]) continue;
+		get_sz(v,o);
+	}
+}
+int dfs(int o){
+	vis[o]= tim;
+	int len= g[o].size(),i,x= 0,y,sum= 1;
+	for (i= 0;i<len;i++){
+		int v= g[o][i];
+		if (vis[v]==tim||b[v]) continue;
+		y= dfs(v);
+		sum+= y;
+		x= max(x,y);
+	}
+	x= max(x,sz-sum);
+	if (x<now){
+		now= x;
+		bc= o;
+	}return sum;
+}
+void go(int o,int fa,int u,int k){
+	int len= g[o].size(),i;
+	k= (ll)k*c[o]%mo;
+	int L= H[k].size();
+	if (!L) sta[++la]= k;
+	if (L<2) H[k].push_back((node){o,u});
+	else {
+		int p= H[k][0].v>H[k][1].v?0:1;
+		if (H[k][p].v>o){
+			H[k][p].v= o;
+			H[k][p].pre= u;
+		}
+	}
+	for (i= 0;i<len;i++){
+		int v= g[o][i];
+		if (b[v]||v==fa) continue;
+		go(v,o,u,k);
+	}
+}
+void init(){
+	memset(b,0,sizeof(b));
+	memset(ans,0,sizeof(ans));
+	cnt= 0;
+	for (int i= 1;i<=n;i++) g[i].clear();
+}
+void gi(int &re){
+	char c= getchar();re= 0;
+	while (c<'0'||c>'9') c= getchar();
+	while ('0'<=c&&c<='9') re= re*10+c-'0',c= getchar();
+}
+void MAIN(){
+	//freopen("1.in","r",stdin);
+	//freopen("1.out","w",stdout);
+	for (i= 1;i<mo;i++){
+		ex_gcd(i,mo,inv[i],x);
+		inv[i]= (inv[i]+mo)%mo;
+	}
+	while (scanf("%d%d",&n, &K)>0){
+		init();
+		for (i= 1;i<=n;i++)
+			//scanf("%d",&c[i]);
+			gi(c[i]);
+		for (i= 1;i<n;i++){
+			//scanf("%d%d",&x, &y);
+			gi(x);gi(y);
+			g[x].push_back(y);
+			g[y].push_back(x);
+		}
+		do{
+			bl= 0;tim++;cnt++;
+			for (i= 1;i<=n;i++)
+				if (!b[i]&&vis[i]!=tim){
+					bl= 1;
+					sz= 0;
+					get_sz(i,0);
+					now= oo;
+					dfs(i);
+					b[bc]= cnt;
+					int len= g[bc].size();
+					for (j= 0;j<len;j++){
+						int v= g[bc][j];
+						if (b[v]) continue;
+						go(v,bc,v,1);
+					}
+					x= (ll)K*inv[c[bc]]%mo;
+					len= H[x].size();
+					for (j= 0;j<len;j++)
+						get_ans(H[x][j].v,bc);
+					for (j= 1;j<=la;j++){
+						len= H[sta[j]].size();
+						x= (ll)K*inv[(ll)c[bc]*sta[j]%mo]%mo;
+						int len2= H[x].size();
+						for (k= 0;k<len;k++)
+							for (z= 0;z<len2;z++){
+								if (H[sta[j]][k].pre==H[x][z].pre) continue;
+								get_ans(H[sta[j]][k].v,H[x][z].v);
+							}								
+					}
+					while (la)
+						H[sta[la--]].clear();					
+				}
+		}while (bl);
+		if (ans[0]) printf("%d %d\n",ans[0], ans[1]);
+		else printf("No solution\n");
+	}	
+}
+int main()
+{
+	/*__asm__("movl %%esp, (%%eax);\n"::"a"(my_stack):"memory");
+	  __asm__("movl %%eax, %%esp;\n"::"a"(my_stack+sizeof(my_stack)-main_stack):"%esp");*/
+	MAIN();
+	/*__asm__("movl (%%eax), %%esp;\n"::"a"(my_stack):"%esp");*/
+	return 0;
+}

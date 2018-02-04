@@ -1,0 +1,8 @@
+带#号代表正式比赛
+带_号代表虚拟比赛(原来是*号,但是windows下的文件名不支持*号)
+long double 的值在cf上不能输出...会变成奇怪的数
+也不能读入
+FST(Failed System Test)
+从2016.4.1起比赛后补充的题目文件夹用^表示
+http://codeforces.com/blog/entry/102
+http://oeis.org/可以查一些奇怪的整数序列

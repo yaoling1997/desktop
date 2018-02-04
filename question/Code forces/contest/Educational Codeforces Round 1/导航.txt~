@@ -1,0 +1,11 @@
+c:
+出题人竟然卡精度
+开long double才能过......
+e:
+设f[n][m][k]为当前巧克力为n*m,分出k块的最小代价
+f[n][m][k]= min(f[i][m][j]+f[n-i][m][k-j]+m*m)
+f[n][m][k]= min(f[n][m][k],f[n][i][j]+f[n][m-i][k-j]+n*n)
+n*m==k时f[n][m][k]= 0
+k==0时,f[n][m][k]= 0
+真是一道无脑dp
+233

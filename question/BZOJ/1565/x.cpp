@@ -1,0 +1,148 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<queue>
+using namespace std;
+const int maxl= 40,maxn= maxl*maxl,oo= 1e9;
+struct node{
+	int x,y;
+};
+struct edge{
+	int from,to,cap,flow;
+};
+vector<edge> edges;
+vector<int> g[maxn],G[maxn];
+vector<node> V[maxl][maxl];
+int B[maxl][maxl],C[maxl][maxl],vis[maxn],cur[maxn],d[maxn],sccno[maxn],scc[maxn],stack[maxn],low[maxn],pre[maxn],b[maxn][maxn],bl[maxn];
+int i,j,k,z,e,n,m,flow,w,x,y,tot,s,t,sum,ans,top,time,cnt,ooo,x1,x2;
+void addedge(int from,int to,int cap){
+	edges.push_back((edge){from,to,cap,0});
+	edges.push_back((edge){to,from,0,0});
+	int m= edges.size();
+	g[from].push_back(m-2);
+	g[to].push_back(m-1);
+}
+void topu(){
+	queue<int> Q;
+	int i;
+	for (i= 1;i<s;i++)
+		if (!d[i]) Q.push(i);
+	while (!Q.empty()){
+		int u= Q.front(),len= G[u].size();
+		Q.pop();
+		for (i= 0;i<len;i++){
+			int v= G[u][i];
+			d[v]--;
+			if (!d[v]) Q.push(v);
+		}
+	}
+}
+bool bfs(){
+	memset(vis,0,sizeof(vis));
+	memset(d,0,sizeof(d));
+	vis[s]= 1;
+	queue<int> Q;
+	Q.push(s);
+	while (!Q.empty()){
+		int u= Q.front(),len= g[u].size(),i;
+		Q.pop();
+		for (i= 0;i<len;i++){
+			edge e= edges[g[u][i]];
+			if (!vis[e.to]&&e.cap-e.flow){
+				vis[e.to]= 1;
+				d[e.to]= d[u]+1;
+				Q.push(e.to);
+			}
+		}
+	}return vis[t];
+}
+int dfs(int o,int re){
+	if (o==t||!re) return re;
+	int flow= 0,f,len= g[o].size();
+	for (int &i= cur[o];i<len;i++){
+		edge &e= edges[g[o][i]];
+		if (d[e.to]==d[o]+1&&(f= dfs(e.to,min(re,e.cap-e.flow)))>0){
+			flow+= f;
+			re-= f;
+			e.flow+= f;
+			edges[g[o][i]^1].flow-= f;
+			if (!re) break;
+		}
+	}return flow;
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d %d",&n, &m);
+	for (i= 1;i<=n;i++)
+		for (j= 1;j<=m;j++){
+			scanf("%d %d",&C[i][j], &w);
+			B[i][j]= ++tot;
+			for (k= 1;k<=w;k++){
+				scanf("%d %d",&x, &y);x++;y++;
+				V[i][j].push_back((node){x,y});
+			}
+		}
+	s= ++tot;t= ++tot;
+	for (i= 1;i<=n;i++)
+		for (j= 1;j<=m;j++){
+			for (k= 1;k<=n;k++)
+				for (z= 1;z<=m;z++){
+					int len= V[k][z].size();
+					if (i==k&&z>j){
+						G[B[k][z]].push_back(B[i][j]);
+						d[B[i][j]]++;
+						continue;
+					}
+					for (e= 0;e<len;e++){
+						x= V[k][z][e].x;y= V[k][z][e].y;
+						if (x==i&&y>=j){
+							G[B[k][z]].push_back(B[i][j]);
+							d[B[i][j]]++;							
+							break;
+						}
+					}
+				}
+		}
+	topu();
+	for (i= 1;i<s;i++) bl[i]= 1;
+	for (i= 1;i<=n;i++)
+		for (j= 1;j<=m;j++)
+			if (d[B[i][j]]!=0)
+				b[i][j]= 1,bl[B[i][j]]= 0;
+	for (i= 1;i<=n;i++)
+		for (j= 1;j<=m;j++)
+			if (!b[i][j]){
+				if (C[i][j]>=0){
+					sum+= C[i][j];
+					addedge(s,B[i][j],C[i][j]);
+				}else {
+					addedge(B[i][j],t,-C[i][j]);
+				}
+				for (k= 1;k<=n;k++)
+					for (z= 1;z<=m;z++)
+						if (!b[k][z]){
+							int len= V[k][z].size();
+							if (i==k&&z>j){
+								addedge(B[i][j],B[k][z],oo);
+								break;
+							}
+							for (e= 0;e<len;e++){
+								x= V[k][z][e].x;y= V[k][z][e].y;
+								if (x==i&&y>=j){
+									addedge(B[i][j],B[k][z],oo);
+									break;
+								}
+							}
+						}
+			}
+	while (bfs()){
+		memset(cur,0,sizeof(cur));
+		flow+= dfs(s,oo);
+	}ans= max(ans,sum-flow);
+	printf("%d",ans);
+	return 0;
+}

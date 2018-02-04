@@ -1,0 +1,4 @@
+DP求最长上升子序列
+满足条件abs(xi-xj)+abs(yi-yj)<=timei-timej时f[i]才能从f[j]转
+但是不知到怎么优化，跑2s多去了
+不知到那些4ms的怎么跑出来的

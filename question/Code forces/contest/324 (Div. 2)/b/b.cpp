@@ -1,0 +1,22 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<queue>
+#include<cmath>
+#define ll long long
+using namespace std;
+const ll mo= 1e9+7;
+ll a,n,i,b;
+int main()
+{
+	scanf("%lld",&n);
+	a= b= 1;
+	for (i= 1;i<=3*n;i++)
+		a= a*3%mo;
+	for (i= 1;i<=n;i++)
+		b= b*7%mo;	
+	printf("%lld",(a-b+mo)%mo);
+	return 0;
+}

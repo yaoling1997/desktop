@@ -1,0 +1,44 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<cmath>
+using namespace std;
+const double oo= 1e10,eps= 1e-8;
+double ans;
+double a,b;
+int dcmp(double x){
+	if (fabs(x)<eps) return 0;
+	return x<0?-1:1;
+}
+void get1(){
+	double t= b-a;
+	double x= -t;
+	if (dcmp(x)<0) return;
+	int k= (a-b)/(2*max(b,a-x))+eps;
+	double c;
+	if (k==0&&!dcmp(a-b)) c= b;
+	else c= (a-b)/(2*k);
+	ans= min(ans,c);
+}
+void get2(){
+	double t= a+b;
+	double x= t;
+	int k= t/(2*max(b,x-a))+eps;
+	if (!k) return;
+	double c= t/(2*k);
+	ans= min(ans,c);
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%lf%lf",&a, &b);
+	ans= oo;
+	get1();
+	get2();
+	if (dcmp(ans-oo)==0) printf("-1\n");
+	else printf("%.12lf",ans);
+	return 0;
+}

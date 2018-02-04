@@ -1,0 +1,19 @@
+证明 (l+r) mod n=0 => r mod n = n - l mod n
+令l = k1 * n + l mod n,r = k2 * n + r mod n
+(l+r) mod n=0
+=> ((k1+k2)*n + l mod n + r mod n)mod n=0
+=>(l mod n + r mod n)mod n=0
+因为 l mod n<n r mod n<n
+所以 l mod n + r mod n=0 or n
+因为l>0,r>0
+所以l mod n + r mod n = n
+=>r mod n= n - l mod n
+
+证明 r mod n = n - l mod n=>(l+r) mod n=0
+
+r mod n = n - l mod n
+=>r mod n + l mod n = n
+令l = k1 * n + l mod n,r = k2 * n + r mod n
+(l+r) mod n= (k1+k2+1)*n mod n=0
+
+

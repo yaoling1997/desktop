@@ -1,0 +1,24 @@
+x:
+  n   n
+s=∑   ∑ gcd(i,j)
+ i=1 j=i+1
+n<=4*1e6
+求s的值
+首先，我们设f(n)= gcd(1,2)+gcd(1,3)+gcd(1,4)+...+gcd(1,n)
+s= f(2)+f(3)+...+f(n)
+我们只需要求出f(1)~f(n)就行了
+考虑到gcd(x,n)都是n的约数,可以按照约数分类
+令g(n,i)表示gcd(x,n)=i   (x<n)的个数
+gcd(x,n)=i  (x<n) <=> gcd(x/i,n/i)=1
+这样，我们就可以用欧拉函数了!
+满足条件 gcd(x/i,n/i)=1 的数的个数为phi(n/i),原因是x/i<n/i
+所以g(n,i)=phi(n/i)
+f(j)= ∑g(n,i)*i 其中i是n的约数
+如果对于每一个n都暴枚约数肯定会TLE,不妨用筛素数的方法来做
+我们for i=1 to n
+i为约数
+则 for (j= 2*i;j<=n;j+= i) j为i的倍数(倍数大于1,因为x≠n)
+f[j]+= phi[n/i]*i
+s[i]= s[i-1]+f[i]
+
+

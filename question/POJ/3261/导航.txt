@@ -1,0 +1,39 @@
+题意是求至少重复k次的最长子串
+用后缀数组
+每个子串都对应某个后缀的某个前缀
+二分长度m
+扫height数组
+若height[i]<m
+则排名1到i-1的任一个后缀与排名i到n的任一个后缀的lcp<m
+
+若有height>=m的连续的一段的长度>=k
+则他们公共的lcp为至少出现了k次的子串
+设i<j,k属于[i+1,j]
+因为lcp(sa[i],sa[j])=min(height[k])
+这个所有sa[k]都有这个前缀lcp(sa[i],sa[j])
+也就是这个子串出现了j-i+1次
+所以得证
+
+后缀数组重要结论:
+子串和某个后缀的前缀一一对应
+对于固定的i,i<j<k   (i,j,k是排名)
+则lcp(sa[i],sa[j])>=lcp(sa[i],sa[k])(反证法)
+同理可证对于固定的k,i<j<k,lcp(sa[i],sa[k])<=lcp(sa[j],sa[k])
+对于i<j,任意k,z属于[i,j]
+lcp(sa[i],sa[j])<=lcp(sa[k],sa[z])(用两次上面的结论)
+lcp(sa[i],sa[j])=min(height[k]) k属于[i+1,j]
+证明:
+1.证明lcp(sa[i],sa[j])<=min(height[k])
+对于任意k属于[i+1,j]
+height[k]= lcp(sa[k-1],sa[k])
+由于k-1属于[i,j],k属于[i,j]
+所以得证
+2.证明lcp(sa[i],sa[j])>=min(height[k])
+若height[k]为最小
+则height[k-1]>=height[k]
+height[k+1]>=height[k]
+即lcp(sa[k-1],sa[k-2])>=lcp(sa[k],sa[k-1])
+lcp(sa[k+1],sa[k])>=lcp(sa[k],sa[k-1])
+所以sa[k]到sa[k]+height[k]-1是sa[k-1]和sa[k+1]的前缀
+同时也是sa[k-2]的前缀
+由于传递性,sa[k]到sa[k]+height[k]-1是任意sa[k]的前缀

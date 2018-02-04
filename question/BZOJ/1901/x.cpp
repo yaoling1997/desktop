@@ -1,0 +1,114 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<ctime>
+using namespace std;
+const int maxn= 600001,oo= 1e9+1;
+struct node *null;
+struct node{
+	node *ch[2];
+	int v,s,r;
+	int cmp(int k){
+		if (k==v) return -1;
+		return k>v;
+	}
+	void mt(){s= ch[0]->s+ch[1]->s+1;}
+	node(int x):v(x),s(0),r(rand()){ch[0]= ch[1]= null;}
+};
+node *a[maxn];
+int c[maxn];
+int n,m,i,l,r,k,x,ans;
+char ch;
+void rotate(node *&o,int d){
+	node *k= o->ch[d^1];o->ch[d^1]= k->ch[d];k->ch[d]= o;
+	o->mt();k->mt();o= k;
+}
+void insert(node *&o,int x){
+	if (o==null) o= new node(x);
+	else {
+		int d= o->cmp(x);
+		if (d==-1) d= 1;
+		insert(o->ch[d],x);
+		if (o->ch[d]->r > o->r) rotate(o,d^1);
+	}
+	o->mt();
+}
+void remove(node *&o,int x){
+	if (o==null) return;
+	int d= o->cmp(x);
+	if (d==-1){
+		if (o->ch[0]==null) o= o->ch[1];
+		else if (o->ch[1]==null) o= o->ch[0];
+		else {
+			int d2= o->ch[0]->r > o->ch[1]->r;
+			rotate(o,d2);remove(o->ch[d2],x);
+		}
+	}else remove(o->ch[d],x);
+	if (o!=null) o->mt();
+}
+int count(node *o,int x){
+	if (o==null) return 0;
+	int d= o->cmp(x);
+	if (d==-1) d= 0;
+	if (d) return count(o->ch[1],x)+o->ch[0]->s+1;
+	else return count(o->ch[0],x);
+}
+int lowbit(int o){return o&(-o);}
+void add(int o,int x){
+	while (o<=n){
+		insert(a[o],x);
+		o+= lowbit(o);
+	}
+}
+int rank(int o,int x){
+	int k= 0;
+	while (o>0){
+		k+= count(a[o],x);
+		o-= lowbit(o);
+	}
+	return k+1;
+}
+int low(int ll,int rr,int k){
+	int l= -oo,r= oo;
+	while (l+1<r){
+		int mid= (l+r)>>1;
+		int su2= rank(rr,mid),su1= rank(ll-1,mid);
+		if (su2-su1+1>k) r= mid;
+		else l= mid;
+	}return l;
+}
+void change(int o,int x){
+	int y= c[o];
+	while (o<=n){
+		remove(a[o],y);
+		insert(a[o],x);
+		o+= lowbit(o);
+	}
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	null= new node(0);
+	scanf("%d %d",&n, &m);
+	for (i= 1;i<=n;i++)
+		a[i]= null;
+	for (i= 1;i<=n;i++){
+		scanf("%d",&c[i]);
+		add(i,c[i]);
+	}
+	for (i= 1;i<=m;i++){
+		do scanf("%c",&ch);
+		while (ch=='\n' || ch==' ');
+		if (ch=='Q'){
+			scanf("%d %d %d\n",&l, &r, &k);
+			ans= low(l,r,k);
+			printf("%d\n",ans);
+		}else {
+			scanf("%d %d\n",&x, &k);
+			change(x,k);
+			c[x]= k;
+		}
+	}
+	return 0;
+}

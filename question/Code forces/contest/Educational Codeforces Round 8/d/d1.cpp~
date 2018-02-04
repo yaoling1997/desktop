@@ -1,0 +1,39 @@
+#include <cstdio>
+#include <cstring>
+using namespace std;
+
+int m, d;
+const int MOD = 1000000007;
+char a[2345], b[2345];
+
+
+int table[2002][2002][2][2];
+
+int calc()
+{
+    int len = strlen(a);
+    for(int i = 0; i < 2; i++)
+        for(int j = 0; j < 2; j++)
+            table[len][0][i][j] = 1;
+    for(int i = len -1; i >= 0; i--)
+        for(int r = 0; r < m; r++)
+            for(int z = 0; z < 2; z++)
+                for(int y = 0; y < 2; y++)
+            {
+                table[i][r][z][y] = 0;
+                for(int k = (y? 0: a[i] - '0'); k <= (z? 9: b[i] - '0'); k++)
+                //    if((i & 1) || k != d)
+                if((i & 1) && k == d || !(i & 1) && k != d)
+                        (table[i][r][z][y] += table[i + 1][(r * 10 + k) % m][z || k < b[i] - '0'][y || k > a[i] - '0']) %= MOD;
+            }
+
+    return table[0][0][0][0];
+}
+
+int main()
+{ 
+    scanf("%d%d%s%s", &m, &d, a, b);
+
+    printf("%d\n", calc());
+    return 0;
+}
