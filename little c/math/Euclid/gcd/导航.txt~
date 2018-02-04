@@ -1,0 +1,11 @@
+x:
+辗转相除法求 最大公约数(greatest common divisor,gcd)
+两个数a,b
+a= k*b+r
+r= a mod b= a-k*b,
+设d为a,b的gcd，则r%d=0
+所以gcd(a,b)=gcd(b,a mod b)
+另外，0与a的gcd为a
+因为0除以任何数都得0(即任何数都能被0整除)
+
+BZOJ: 1876 2005

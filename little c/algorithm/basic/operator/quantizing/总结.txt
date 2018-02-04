@@ -1,0 +1,4 @@
+double ceil(double x)//向上取整
+double floor(double x)//向下取整
+(int)x 向0取整
+

@@ -1,0 +1,9 @@
+strchr(const char *s,char c)查找字符串s中首次出现字符c的位置。
+memset
+memcpy
+strlen
+......
+memset(a,0,sizeof(a)) a中全为0
+memset(a,-1,sizeof(a)) a中全为-1
+memset(a,127,sizeof(a)) a中全为一个比较大的数字
+

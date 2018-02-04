@@ -1,0 +1,10 @@
+swap(type,type)交换同类型的两个元素O(1)
+unique(begin,end)去掉一个序列中相邻的相同元素O(n)返回指向操作后序列尾的指针
+max_element(begin,end),min_element(begin,end)返回最小最大元素指针
+reverse(begin,end)O(n)翻转序列
+random_shuffle(begin,end)O(n)随机打乱序列
+sort(begin,end)or sort(begin,end,cmp)nlog(n)排序
+stable_sort(begin,end) or stable_sort(begin,end,cmp)nlog(n)稳定排序
+next_permutation(begin,end),prev_permutaion(begin,end)
+按字典序排好后变成上一个或下一个排列
+当跨立最小最大排列时函数会返回false,否则返回true

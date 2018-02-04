@@ -1,0 +1,7 @@
+char s[maxn],c
+strlen(s) 返回长度
+gets(s) 读一行
+scanf("%s",s)读到空格或换行时停止(不包括空格和换行)
+printf("%s",s)输出s(遇到\0停止)
+fgets(s,n,stdin)s最多读进长度为n-1的字符串(不知道为什么是n-1)
+toupper(c)返回c的大写形式(要开ctype.h或cctype库)

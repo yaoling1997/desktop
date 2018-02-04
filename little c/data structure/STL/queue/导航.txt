@@ -1,0 +1,1 @@
+STL中的queue没有clear函数

@@ -1,0 +1,11 @@
+SBSGSA(Shank's Baby-Step-Giant-Step Algorithm)
+Shank的大步小步算法
+对于模方程a^x≡b (mod n) n是质数
+在n^0.5log(n)的时间内求出最小的非负解
+由于n是质数,考虑欧拉定理 a^(n-1)≡1 (mod n)
+所以x只需要考虑0~n-1就行了(大于n-1就开始循环了
+a^n=a^(n-1)*a≡a (mod n))
+n比较大,若我们先检查前m项,即a^0,a^1...a^(m-1)模n是否为b,把a^i mod n存在ei里。下面考虑a^m,a^(m+1)...a^(2*m-1),这次不用依次检查,因为如果它们中有解,则相当于存在i使得ei*a^m≡b (mod n),两边同乘a^(-m)(a在n下的逆)得
+ei≡b*a^(-m) (mod n),设 b'= b*a^(m-1),这样只需检查是否有ei=b'即可。
+我们把ei保存在一个STL里,但考虑到下标i,所以用一个map<int,int>X,其中X[j]满足ei=j的最小的i(因为可能有多个ei的值相同)。
+每次更新b'直到循环m次或b'=ei为止

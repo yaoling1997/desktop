@@ -1,0 +1,6 @@
+STL中的堆是一个大根堆
+STL堆没有clear而且在gdb里不能看size
+用struct的话要重载'<'不能重载'>'
+BZOJ: 2006
+UVa: 11997
+LA: 3135

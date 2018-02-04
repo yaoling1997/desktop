@@ -1,0 +1,9 @@
+LCT关键操作:access
+其它操作:
+findRoot(沿着父亲往上走,看最顶部的节点是否相同)
+makeRoot(把作为原树新根的节点access,再splay到顶部,然后打翻转标记)
+link(makeRoot一个点,再把它的父亲设置为另一个点)
+cut(makeRoot一个点u,再access另一个点v,再splay(v)让它到顶部,然后使v->ch[0]= u->par= null,最后别忘记v->mt())
+要判断两个点是否联通只要看它们的顶部的节点是否相同
+根有两个,一个是LCT的根,另一个是原树的根...
+BZOJ :2049 1036 2002

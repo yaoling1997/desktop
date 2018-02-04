@@ -1,0 +1,3 @@
+gdb中可以调用memset(a,0,sizeof(a))将一个数组清空
+p memset(a,0,sizeof(a))
+gdb调试时用ctrl+上可以调用历史指令

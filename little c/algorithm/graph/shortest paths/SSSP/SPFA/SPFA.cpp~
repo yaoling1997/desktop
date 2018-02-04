@@ -1,0 +1,57 @@
+#include<cstdio>
+#include<cstdlib>
+struct rec{
+	int des,w;
+	rec *next;
+};
+const int oo=99999999;
+rec *a[1000],*p;
+int d[1000];
+int n,m,i,j,k,x,y,z;
+bool b[1000];
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d %d\n",&n,&m);
+	for (i= 1;i<= n;i++)
+		d[i]= oo;
+	d[1]= 0;
+	for (i= 1;i<= m;i++){
+		scanf("%d %d %d\n",&x,&y,&z);
+		p= new rec;
+		p->des= y;
+		p->w= z;
+		p->next= a[x];
+		a[x]= p;
+	}
+	int f= 0,r= 1,l[1000]= {0};
+	l[1]= 1;
+	b[1]= true;
+	while (f!=r){
+		f++;
+		p= a[l[f]];
+		while (p!=NULL){
+			if (d[l[f]]+p->w<d[p->des]){
+				d[p->des]= d[l[f]]+p->w;
+				if (!b[p->des]){
+					r++;
+					b[p->des]= true;
+					l[r]=p->des;
+				}
+   			}
+			p=p->next;
+		}
+		b[l[f]]=false;
+	}
+	for (i= 1;i<=n;i++)
+		printf("%d ",d[i]);
+	fclose(stdin);
+	fclose(stdout);
+	return 0;	
+}
+
+
+
+
+

@@ -1,0 +1,34 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int a[100];
+int na,nb,i;
+char s[100];
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%s\n",s+1);
+	na= strlen(s+1);
+	for (i= 1;i<=na;i++)
+		a[na-i+1]= s[i]-48;
+	scanf("%s",s+1);
+	nb= strlen(s+1);
+	for (i= 1;i<=nb;i++)
+		a[nb-i+1]+=s[i]-48;
+	na= max(na,nb);
+	for (i= 1;i<=na;i++){
+		a[i+1]+=a[i]/10;
+		a[i]%=10;
+	}
+	while (a[na+1]!=0){
+		na++;
+		a[na+1]=a[na]/10;
+		a[na]%=10;
+	}
+	for (i= na;i>0;i--)
+		printf("%d",a[i]);
+	return 0;
+}

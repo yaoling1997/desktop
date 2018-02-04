@@ -1,0 +1,1 @@
+#include<bits/stdc++.h>包含C++的所有头文件

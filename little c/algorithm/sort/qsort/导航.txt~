@@ -1,0 +1,10 @@
+x:
+快排（手打）
+x1:
+快排（系统自带）
+条件就是 bool类型的 cmp 函数（自己编）
+举例：
+bool cmp(type a,type b){
+	return a<b;
+}
+调用时就是 sort(a+1,a+n+1,cmp)

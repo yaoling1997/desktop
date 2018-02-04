@@ -1,0 +1,47 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+using namespace std;
+struct rec{
+	int next[100];
+	bool bl;
+};
+rec a[1000];
+char s[1000];
+int top,now,i,j,n,m,len;
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d %d\n",&n,&m);
+	for (i= 1;i<=n;i++){
+		scanf("%s\n",s+1);
+		len= strlen(s+1);
+		now= 0;
+		for (j= 1;j<=len;j++)
+			if (a[now].next[s[j]]!=0) now= a[now].next[s[j]];
+			else {
+				top++;
+				a[now].next[s[j]]= top;
+				now= top;
+			}
+		a[now].bl= true;		
+	}
+	bool bl;
+	for (i= 1;i<=m;i++){
+		scanf("%s",s+1);
+		len= strlen(s+1);
+		bl= true;
+		now= 0;
+		for (j= 1;j<=len;j++)
+			if (a[now].next[s[j]]!=0) now= a[now].next[s[j]];
+			else {
+				bl= false;
+				break;
+			}
+		if (!a[now].bl) bl=false;
+		if (bl) printf("Yes\n");
+		else printf("No\n");
+	}
+	return 0;	
+}

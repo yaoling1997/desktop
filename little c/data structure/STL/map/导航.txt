@@ -1,0 +1,11 @@
+map可以翻译为映射
+map支持插入一个元素，删除一个元素，查询first值大于x的第一个元素,大于等于x的第一个元素，等于x的某一个元素，map的排序与查询都只与first相关而与second无关。
+map不可以改first，但可以改second且没有first重复的元素，second可以重复
+x:
+map
+
+
+
+
+
+multimap不怎么会用

@@ -1,0 +1,41 @@
+#include<cstdio>
+#include<cstdlib>
+using namespace std;
+const int maxn= 3001;
+int a[maxn],b[maxn],c[maxn],d[maxn],e[maxn];
+int n,ans,i;
+void merge(int p,int q){
+	if (q>p){
+		int mid= (p+q)>>1,i,j= mid+1,k;
+		merge(p,mid);merge(mid+1,q);
+		for (i= p;i<=mid;i++){
+			b[i]= a[i];
+			e[i]= d[i];
+		}
+		for (i= mid+1;i<=q;i++){
+			c[i]= a[i];
+			e[i]= d[i];
+		}
+		i= p;
+		for (k= p;k<=q;k++)
+			if (j<=q && (b[i]>c[j] || i>mid)){
+				a[k]= c[j];
+				d[k]= e[j++];
+				d[k]+= mid-i+1;
+			}else {
+				a[k]= b[i];
+				d[k]= e[i++];
+			}
+	}
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d",&n);
+	for (i= 1;i<=n;i++)
+		scanf("%d",&a[i]);
+	merge(1,n);
+	for (i= 1;i<=n;i++) ans+= d[i];
+	printf("%d",ans);
+}

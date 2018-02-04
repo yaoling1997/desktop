@@ -1,0 +1,68 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+struct point{
+	double x,y;
+};
+typedef point vec;
+vec operator +(vec a,vec b){a.x+= b.x;a.y+= b.y;return a;}
+vec operator -(vec a,vec b){a.x-= b.x;a.y-= b.y;return a;}
+vec operator *(double b,vec a){a.x*= b;a.y*= b;return a;}
+vec operator /(vec a,double b){a.x/= b;a.y/= b;return a;}
+bool operator <(vec a,vec b){return (a.x<b.x) || (a.x==b.x && a.y<b.y);}
+double cj(vec a,vec b){return a.x*b.y-a.y*b.x;}
+double dj(vec a,vec b){return a.x*b.x+a.y*b.y;}
+double length(vec a){return sqrt(dj(a,a));}
+vec rot(vec a,double r){
+	vec c;
+	c.x= a.x*cos(r)-a.y*sin(r);
+	c.y= a.x*sin(r)+a.y*cos(r);
+	return c;
+}
+point jd(point p,vec v,point q,vec w){
+	vec u= p-q;
+	double t= cj(w,u)/cj(v,w);
+	return p+t*v;
+}
+double dist1(point a,point b,point p){return cj(b-a,p-a)/length(b-a);}
+double dist2(point a,point b,point p){
+	if (dj(b-a,p-a)<0) return length(p-a);
+	if (dj(a-b,p-b)<0) return length(p-b);
+	return dist1(a,b,p);
+}
+point fp(point a,point b,point p){vec v= b-a;return a+(dj(v,p-a)/dj(v,v))*v;}
+bool xj(point a1,point a2,point b1,point b2){
+	double x1= cj(a2-a1,b1-a1),x2= cj(a2-a1,b2-a1);
+	double y1= cj(b2-b1,a1-b1),y2= cj(b2-b1,a2-b1);
+	if (x1==0 && x2==0){
+		if (a2<a1) swap(a1,a2);
+		return ((b1.x>a1.x && b1.x<a2.x) || (b2.x>a1.x && b2.x<a2.x));	   
+	}
+	return (x1*x2<0) && (y1*y2<0);
+}
+point a,b,c,d;
+double r;
+int main(){
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%lf %lf\n",&a.x, &a.y);
+	scanf("%lf %lf\n",&b.x, &b.y);
+	scanf("%lf %lf\n",&c.x, &c.y);
+	scanf("%lf %lf\n",&d.x, &d.y);
+	scanf("%lf\n",&r);
+	printf("%.4lf\n",cj(b-a,d-c));
+	printf("%.4lf\n",dj(b-a,d-c));
+	vec v= rot(b-a,r);
+	printf("%.4lf %.4lf\n",v.x, v.y);
+	point p= jd(a,b-a,c,d-c);
+	printf("%.4lf %.4lf\n",p.x, p.y);
+	printf("%.4lf\n",dist1(a,b,c));
+	printf("%.4lf\n",dist2(a,b,c));
+	p= fp(a,b,c);
+	printf("%.4lf %.4lf\n",p.x, p.y);
+	if (xj(a,b,c,d)) printf("yes!\n");
+	else printf("no!\n");
+	return 0;
+}

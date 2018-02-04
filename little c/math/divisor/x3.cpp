@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cmath>
+using namespace std;
+const int maxn= 3001;
+int b[maxn];
+int n,i,x,j,re,ans;
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("2.out","w",stdout);
+	scanf("%d",&n);
+	for (i= 1;i<=n;i++){
+		x= i;
+		for (j= 2;j<=sqrt(x);j++)
+			if (x%j==0){
+				re= 0;
+				while (x%j==0){
+					re++;
+					x/= j;
+				}
+				b[j]+= re;
+			}
+		if (x!=1) b[x]++;
+	}
+	ans= 1;
+	for (i= 2;i<=n;i++)
+		ans*= b[i]+1;
+	printf("%d",ans);
+	return 0;
+}

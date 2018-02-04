@@ -1,0 +1,40 @@
+x:
+中国剩余定理(CRT=Chinese remainder theorem)
+给出一些模方程形如
+x≡ai(mod mi)(任意mi,mj(i!=j)互素)
+求一个x的解
+
+如果方程形式为ax≡b (mod n)
+可以先化为不定方程形式ax-ny=b
+设d=gcd(a,n),若d不是b的约数则无解(根据扩欧可得)
+否则a,b,n同除d,方程变为a'x-n'y=b'
+再化为模方程:a'x≡b' (mod n')
+由于a'与n'互素,所以a'在模n'的意义下存在逆元(a')^(-1)
+两边同乘逆得x≡b'(a')^-1 (mod n')
+令p=b'(a')^(-1)(mod n') 化为:x≡p (mod n')
+    
+                  n
+考虑如何求解。令M= ∏ mi, wi=M/mi
+                 i=1
+则(wi,mi)=1
+可得piwi+qimi=1
+令ei= piwi
+则ei+qimi=1
+化为ei≡1 (mod mi)
+因为x≡ai (mod mi)
+得x≡eiai (mod mi)
+为了满足所有的条件，方程组等价于方程:x≡e1a1+e2a2...+enan(mod M)
+易得x0=e1a1+e2a2...+enan 是x的一个解
+因为把等式wipi+miqi=1两边模mi后立即可得eimodmi=1所以x0对mi取模时除了eiai这一项余数为ai外,其余项均为0
+设p=p1*p2..pk 怎么算x%p?(pi次方也没关系,多乘一下就行了)
+x%p1=a1
+x%p2=a2
+...
+全化为x≡ai (mod pi)
+由于求出了所有的ai,要求x%p直接CRT合并！
+
+可以用来分解模的数
+如果模一个比较大的合数
+合数质因子分解,分别求模,然后合并
+
+BZOJ 1951

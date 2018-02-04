@@ -1,0 +1,58 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+using namespace std;
+const int maxn= 300;
+int a[maxn][maxn],c[maxn][maxn];
+int n,m,i,j,x,y,z,x1,y1,x2,y2;
+int lowbit(int o){return o&(-o);}
+void change(int x,int y){
+	while (x<=n){
+		int i= y;
+		while (i<=m){
+			c[x][i]+= z;
+			i+= lowbit(i);
+		}
+		x+= lowbit(x);
+	}
+}
+int ask(int x,int y){
+	int ans= 0;
+	while (x>0){
+		int i= y;
+		while (i>0){
+			ans+= c[x][i];
+			i-= lowbit(i);
+		}
+		x-= lowbit(x);
+	}
+	return ans;
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d %d\n",&n, &m);
+	for (i= 1;i<=n;i++)
+		for (j= 1;j<=m;j++){
+			scanf("%d",&a[i][j]);
+			a[i][j]+= a[i-1][j]+a[i][j-1]-a[i-1][j-1];
+		}
+	for (i= 1;i<=n;i++)
+		for (j= 1;j<= m;j++)
+			c[i][j]= a[i][j]-a[i-lowbit(i)][j]-a[i][j-lowbit(j)]+a[i-lowbit(i)][j-lowbit(j)];
+	scanf("%d\n",&m);
+	for (i= 1;i<=m;i++){
+		scanf("%d",&x);
+		if (x==1){
+			scanf("%d %d %d\n",&x, &y, &z);
+			change(x,y);
+		}else {
+			scanf("%d %d %d %d\n",&x1, &y1, &x2, &y2);
+			if (y1>y2) swap(y1,y2);
+			if (x1>x2) swap(x1,x2);
+			printf("%d\n",ask(x2,y2)-ask(x2,y1-1)-ask(x1-1,y2)+ask(x1-1,y1-1));
+		}
+	}
+	return 0;
+}

@@ -1,0 +1,24 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<algorithmy>
+const int maxn= 3001;
+int fa[maxn],fi[maxn],a[maxn];
+int n,s,i,j;
+int main()
+{
+	scanf("%d %d",&n, &s);
+	for (i= 1;i<=n;i++)
+		scanf("%d",&a[i]);
+	memset(fa,127,sizeof(fa));
+	memset(fi,128,sizeof(fi));
+	fa[0]= fi[0]= 0;
+	for (i= 1;i<=s;i++)
+		for (j= 1;j<=n;j++){
+			if (a[j]>i) break;
+			fa[i]= max(fa[i],fa[i-a[j]]+1);
+			fi[i]= min(fi[i],fi[i-a[j]]+1);
+		}
+	printf("%d %d",fa[s], fi[s]);
+	return 0;
+}

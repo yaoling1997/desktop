@@ -1,0 +1,14 @@
+x:
+vector可以理解为动态开空间的数组，也就是向量了
+vector<int> g;
+g.push_back(x);把x插到g的末尾
+g.erase(x,y)x,y是指针，删去x~y的部分，O(n)
+g.pop_back()移除g的末尾元素
+g.size()返回大小
+g.clear()清空
+g.begin()头指针
+g.end()尾指针
+g.empty()判是否为空
+g.insert(posi,x)在posi的位置插入x
+g.insert(posi,num,x)在posi的位置插入num个x
+g.insert(posi,start,end)在posi位置插入[start,end)间的元素，插入后元素均后移

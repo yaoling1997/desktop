@@ -1,0 +1,5 @@
+有什么方法能让cin和cout的效率和scanf一样快呢?
+ios::sync_with_stdio(false);
+加上上面这句话就行了,不过不能用scanf读了
+std::ios::sync_with_stdio(false)  的作用是取消缓冲区同步，因为printf()/scanf()是C函数，而cin/cout是C++函数，这些函数需要用到各自的缓冲区，为了防止各自的缓冲区错位，C++默认将C函数和C++函数的缓冲区同步。当你设置成std::ios::sync_with_stdio(false)后C++就会取消同步，这会提高cin/cout的运行速度，代价是不能和printf()/scanf()混用，否则会因不同步而出现问题，所以在这种情况下整个程序切记不可将cin/cout和printf()/scanf()混用
+鉴于输入太大(2亿个1加上空格刚好400MB),要用的时候再造吧

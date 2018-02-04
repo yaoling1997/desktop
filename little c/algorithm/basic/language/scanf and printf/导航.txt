@@ -1,0 +1,16 @@
+最近发现了一个新现象
+如果 int a;
+scanf("%d",&a)
+而文本是一个 '*'
+就当它是一个字符吧
+这玩意不会被读进来，并且光标不会移动
+
+%lld   long long, unsigned long long
+%u   unsigned int
+%Lf long double
+
+用printf输出1亿个int类型的1和字符'1'
+前者要17.7s,后者要2.8s,putchar('1')还要3.1s
+但是如果是printf("1 ");1亿次也要17s左右
+直接scanf读1亿次要17s左右,用读入优化后只要5s多一点
+直接cin要42s左右,用上ios::sync_with_stdio(false)只要15s左右,比直接scanf还要快(不过scanf已经用习惯了,读入优化都很少打)

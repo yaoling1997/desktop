@@ -1,0 +1,41 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+using namespace std;
+const int maxn= 3001;
+int f[maxn];
+char p[maxn],t[maxn];
+int i,j,lent,lenp;
+void kmp(){
+	f[1]= 0;
+	int k= 0;
+	for (int i= 2;i<=lenp;i++){
+		while (k>0 && p[k+1]!=p[i])
+			k= f[k];
+		if (p[k+1]==p[i]) k++;
+		f[i]= k;
+	}
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	bool bl= 0;
+	scanf("%s\n%s",t+1,p+1);
+	lent= strlen(t+1);
+	lenp= strlen(p+1);
+	kmp();
+	int k= 0;
+	for (i= 1;i<=lent;i++){
+		while (k>0 && p[k+1]!=t[i])
+			k= f[k];
+		if (p[k+1]==t[i]) k++;
+		if (k==lenp){
+			printf("%d ",i-k+1);
+			bl =1;
+			k=f[k];
+		}
+	}
+	if (!bl) printf("Oh shit !");
+	return 0;
+}

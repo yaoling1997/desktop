@@ -1,0 +1,8 @@
+#!/bin/bash 
+while true; do
+./make
+./2
+./1
+diff 1.out 2.out
+if [ $? -ne 0 ] ; then break; fi
+done

@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+const int maxn= 3001;
+int rad[maxn];
+char s[maxn],st[maxn];
+int id,mx,len,n,i,ans;
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("2.out","w",stdout);
+	scanf("%s",s+1);
+	s[0]= '$';
+	len= strlen(s+1);
+	for (i= 1;i<=len;i++){
+		if (mx>i)
+			rad[i]= min(rad[2*id-i],mx-i+1);
+		else rad[i]= 1;
+		while (s[i-rad[i]]==s[i+rad[i]]) rad[i]++;
+		if (i+rad[i]>mx){
+			mx= rad[i];
+			id= i;
+		}
+	}
+	for (i= 1;i<=len;i++)
+		ans= max(ans,2*rad[i]-1);
+	printf("%d",ans);
+	return 0;
+}

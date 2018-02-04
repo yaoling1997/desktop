@@ -1,0 +1,96 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn= 3001,oo= 999999999;
+const double eps=1e-8,rad= 0.3333333;
+struct point {
+	double x,y;
+};
+typedef point vec;
+point p[maxn],ch[maxn];
+int i,n,m,a1,a2,a3,a4;
+vec v1,v2,v3,v4;
+double ans,g1,g3,po;
+vec operator +(vec a,vec b){a.x+= b.x;a.y+= b.y;return a;}
+vec operator -(vec a,vec b){a.x-= b.x;a.y-= b.y;return a;}
+vec operator *(double t,vec a){a.x*= t;a.y*= t;return a;}
+vec operator /(vec a,double t){a.x/= t;a.y/= t;return a;}
+bool operator <(vec a,vec b){return (a.x<b.x) || (a.x==b.x && a.y<b.y);}
+double cj(vec a,vec b){return a.x*b.y-a.y*b.x;}
+double dj(vec a,vec b){return a.x*b.x+a.y*b.y;}
+vec rot(vec a,double r){
+	return (vec){a.x*cos(r)-a.y*sin(r),a.x*sin(r)+a.y*cos(r)};
+}
+int inc(int a){
+	a++;
+	if (a>m) a-= m;
+	return a;
+}
+void rotate(double r){
+	v1= rot(v1,r);
+	v2= rot(v2,r);
+	v3= rot(v3,r);
+	v4= rot(v4,r);
+	while (cj(v2,ch[inc(a2)]-ch[a2])<=0) a2= inc(a2);
+	while (cj(v4,ch[inc(a4)]-ch[a4])<=0) a4= inc(a4);
+}
+double length(vec a){return sqrt(dj(a,a));}
+double dist1(point a,point b,point c){return fabs(cj(b-a,c-a)/length(b-a));}
+double angle(vec a,vec b){return acos(dj(a,b)/length(a)/length(b));}
+double xx(){
+	double x= dist1(ch[a1],ch[a1]+v1,ch[a3]);
+	double y= dist1(ch[a2],ch[a2]+v2,ch[a4]);
+	return 2*(x+y);
+}
+bool cmp(vec a,vec b){return a<b;}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d\n",&n);
+	for (i= 1;i<=n;i++) {
+		scanf("%lf %lf\n",&p[i].x, &p[i].y);
+		p[i]= rot(p[i],rad);
+	}
+	sort(p+1,p+n+1,cmp);
+	for (i= 1;i<=n;i++){
+		while (m>1 && cj(ch[m]-ch[m-1],p[i]-ch[m-1])<=0) m--;
+		ch[++m]= p[i];
+	}
+	int k= m;
+	for (i= n-1;i>0;i--){
+		while (m>k && cj(ch[m]-ch[m-1],p[i]-ch[m-1])<=0) m--;
+		ch[++m]= p[i];
+	}
+	if (m>1) m--;
+	for (i= 1;i<=m;i++){
+		if (a1==0 || ch[a1].x>ch[i].x) a1= i;
+		if (a2==0 || ch[a2].y>ch[i].y) a2= i;
+		if (a3==0 || ch[a3].x<ch[i].x) a3= i;
+		if (a4==0 || ch[a4].y<ch[i].y) a4= i;
+	}
+	v1.y= -1;v2.x= 1;v3.y= 1;v4.x= -1;ans= oo;
+	while (po<3.4415926){
+		g1= angle(v1,ch[inc(a1)]-ch[a1]);
+		g3= angle(v3,ch[inc(a3)]-ch[a3]);
+		po+= min(g1,g3);
+		if (fabs(g1-g3)<eps){
+			rotate(g1);
+			a1= inc(a1);
+			a3= inc(a3);
+			ans= min(ans,xx());
+		}else if (g1<g3){
+			rotate(g1);
+			a1= inc(a1);
+			ans= min(ans,xx());
+		}else {
+			rotate(g3);
+			a3= inc(a3);
+			ans= min(ans,xx());
+		}
+	}
+	printf("%.2lf",ans);
+	return 0;	
+}

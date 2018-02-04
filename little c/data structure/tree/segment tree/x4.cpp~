@@ -1,0 +1,60 @@
+#include<cstdio>
+#include<cstdlib>
+using namespace std;
+const int maxn= 15,maxm= 9;
+int a[maxn],left[maxn],right[maxn],size[maxn],c[maxn];
+int i,n,m,k,x,y,top,root;
+void insert(int &o,int l,int r){
+	if (!o) o= ++top;
+	size[o]++;
+	if (l+1==r) return;
+	else {
+		int mid= (l+r)>>1;
+		if (x<mid) insert(left[o],l,mid);
+		else insert(right[o],mid,r);
+	}
+}
+int remove(int &o,int l,int r){
+	if (!o) return 0;
+	int mid= (l+r)>>1,y= size[o];
+	if (l+1==r){
+		if (!size[o]) return 0;
+		return size[o]--;
+	}else {
+		if (x<mid){
+			if (remove(left[o],l,mid)) size[o]--;
+		}
+		else if (remove(right[o],mid,r)) size[o]--;
+	}return size[o]!=y;
+}
+int cmp(int o,int k){
+	return k>size[left[o]];
+}
+int find(int o,int l,int r,int k){
+	if (l+1==r) return l;
+	int d= cmp(o,k),mid= (l+r)>>1;
+	if (d) return find(right[o],mid,r,k-size[left[o]]);
+	else return find(left[o],l,mid,k);
+}
+void change(){
+	remove(root,0,maxm+1);x= y;
+	insert(root,0,maxm+1);
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d %d",&n, &m);
+	for (i= 1;i<=n;i++){
+		scanf("%d",&x);c[i]= x;
+		insert(root,0,maxm+1);
+	}
+	for (i= 1;i<=m;i++){
+		scanf("%d %d",&x, &y);
+		int k= c[x];c[x]= y;x= k;
+		change();
+	}
+	scanf("%d",&k);
+	if (k>n) printf("Oh shit!");
+	else printf("%d",find(root,0,maxm+1,k));
+}

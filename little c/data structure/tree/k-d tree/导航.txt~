@@ -1,0 +1,57 @@
+根据百度百科的 伪码 编出来的2维k-d tree...
+用node表示k-d tree的节点类型
+struct node{
+	double x,y;
+	int split,l,r,left,right;
+};
+x,y表示这个节点对应的坐标
+split表示垂直于分割超平面的方向轴序号
+l,r表示该节点所代表的范围(就是第几个点到第几个点)
+left,right左右儿子指针
+当然如果需要的话可以加入par指针
+
+x:
+1.建树
+2.查找
+
+建树过程:
+1.如果数据点集Data-set为空,返回空的k-d tree
+2.生成节点:
+(1)调用节点生成程序:
+对于所有描述子数据（特征矢量）,统计它们在每个维上的数据方差
+挑选出最大值，对应的维就是split域的值
+数据方差大表明沿该坐标轴方向上的数据分散得比较开
+在这个方向上进行数据分割有较好的分辨率(感性地理解下,很有道理啊...)
+（2）确定Node-data域:
+数据点集Data-set按其第split域的值排序
+位于正中间的那个数据点被选为Node-data
+此时新的Data-set' = Data-set\Node-data（除去其中Node-data这一点）
+3.dataleft = {d属于Data-set' && d[split] ≤ Node-data[split]}
+Left_Range = {Range && dataleft} 
+dataright = {d属于Data-set' && d[split] > Node-data[split]}
+Right_Range = {Range && dataright}
+4.left = 由（dataleft，Left_Range）建立的k-d tree
+即递归调用createKDTree（dataleft，Left_Range）
+并设置left的parent域为Kd
+right = 由（dataright，Right_Range）建立的k-d tree
+即调用createKDTree（dataright，Right_Range）
+并设置right的parent域为Kd
+
+http://baike.baidu.com/link?url=fojEy8lry0hJeCSX8tEkMvfwhnW
+jEO5oUWyhyKoKbHrp39SM_mn8tqED3KuUnmiCD5IHlFBDvUKRx7ZdROueYq
+上面有实例...
+
+查找过程:
+去上面提供的网址看吧,有实例
+伪代码:
+从root节点开始，DFS搜索直到叶子节点，同时在stack中顺序存储已经访问的节点。
+如果搜索到叶子节点，当前的叶子节点被设为最近邻节点。
+然后通过stack回溯:
+如果当前点的距离比最近邻点距离近，更新最近邻节点.
+然后检查以最近距离为半径的圆是否和父节点的超平面相交.
+如果相交，则必须到父节点的另外一侧，用同样的DFS搜索法，开始检查最近邻节点
+如果不相交，则继续往上回溯
+而父节点的另一侧子节点都被淘汰，不在考虑的范围中
+当搜索回到root节点时，搜索完成，得到最近邻节点
+
+BZOJ: 3489(一个靠谱的3维k-d树模板题)

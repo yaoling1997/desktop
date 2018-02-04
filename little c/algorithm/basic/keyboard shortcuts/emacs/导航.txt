@@ -1,0 +1,12 @@
+快捷键
+ctrl+alt+shift+5正则替换,打'.'字符为任意字符
+y为依次替换,!为全部替换
+
+alt+x replace-string
+需要被替换的字符串 enter
+需要替换成的字符串 enter
+替换数组变量名的话加个'['就好了
+
+ctrl+j 把当前行光标以后的内容移至下一行
+
+CUA下:ctrl+x+ctrl+z挂起emacs

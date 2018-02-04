@@ -1,0 +1,87 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+using namespace std;
+const int maxn= 5004,oo= 1e9;
+int c[maxn][maxn],Max[maxn][maxn],Min[maxn][maxn];
+int n,m,i,j,xo,xleaf,x1,y1,x2,y2,x,y,v,vmax,vmin,q,ans= 2*oo;
+void ask1(int o,int l,int r){
+	if (y1<=l && r<=y2){
+		vmax= max(vmax,Max[xo][o]);vmin= min(vmin,Min[xo][o]);
+	}else {
+		int mid =(l+r)>>1;
+		if (y1<mid) ask1(2*o,l,mid);
+		if (y2>mid) ask1(2*o+1,mid,r);
+	}
+}
+void ask2(int o,int l,int r){
+	if (x1<=l && r<=x2){xo= o;ask1(1,1,m+1);}
+	else {
+		int mid= (l+r)>>1;
+		if (x1<mid) ask2(2*o,l,mid);
+		if (x2>mid) ask2(2*o+1,mid,r);
+	}
+}
+void change1(int o,int l,int r){
+	if (l+1==r){
+		if (xleaf){Max[xo][o]= Min[xo][o]= v;return;}
+		Max[xo][o]= max(Max[2*xo][o],Max[2*xo+1][o]);
+		Min[xo][o]= min(Min[2*xo][o],Min[2*xo+1][o]);
+	}else {
+		int mid= (l+r)>>1;
+		if (y1<mid) change1(2*o,l,mid);
+		if (y2>mid) change1(2*o+1,mid,r);
+		Max[xo][o]= max(Max[xo][2*o],Max[xo][2*o+1]);
+		Min[xo][o]= min(Min[xo][2*o],Min[xo][2*o+1]);
+	}
+}
+void change2(int o,int l,int r){
+	if (l+1==r){xleaf= 1;xo= o;change1(1,1,m+1);}
+	else {
+		int mid= (l+r)>>1;
+		if (x1<mid) change2(2*o,l,mid);
+		if (x2>mid) change2(2*o+1,mid,r);
+		xleaf= 0;xo= o;change1(1,1,m+1);
+	}
+}
+void build1(int o,int l,int r){
+	if (l+1==r){
+		if (xleaf){Max[xo][o]=Min[xo][o]= c[xleaf][l];return;}
+		Max[xo][o]= max(Max[2*xo][o],Max[2*xo+1][o]);
+		Min[xo][o]= min(Min[2*xo][o],Min[2*xo+1][o]);
+	}else {
+		int mid= (l+r)>>1;
+		build1(2*o,l,mid);
+		build1(2*o+1,mid,r);
+		Max[xo][o]= max(Max[xo][2*o],Max[xo][2*o+1]);
+		Min[xo][o]= min(Min[xo][2*o],Min[xo][2*o+1]);
+	}
+}
+void build2(int o,int l,int r){
+	if (l+1==r){xleaf= l;xo= o;build1(1,1,m+1);}
+	else {
+		int mid= (l+r)>>1;
+		build2(2*o,l,mid);
+		build2(2*o+1,mid,r);
+		xleaf= 0;xo= o;build1(1,1,m+1);
+	}
+}
+
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d %d %d",&n, &m, &q);
+	for (i= 1;i<=n;i++)
+		for (j= 1;j<=m;j++)
+			scanf("%d",&c[i][j]);
+	build2(1,1,n+1);
+	for (i= 1;i<=n-q+1;i++)
+		for (j= 1;j<=m-q+1;j++){
+			vmin= oo;vmax= -oo;x1= i;x2= i+q;y1= j;y2= j+q;
+			ask2(1,1,n+1);
+			if (vmax-vmin<ans)
+				ans= vmax-vmin;
+		}
+	printf("%d",ans);
+}

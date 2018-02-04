@@ -1,0 +1,19 @@
+对于不完全为0的非负整数a,b,gcd(a,b)表示a，b的最大公约数，必然存在整数对x，y,使得ax+by=gcd(a,b)。
+当b=0时，gcd(a,b)=a,此时x=1,y=0
+ab!=0时。
+设ax1+by1=gcd(a,b);
+bx2+(a mod b)y2=gcd(b,a mod b);
+根据朴素的欧几里德原理有，gcd(a,b)=gcd(b,a mod b)
+则ax1+by1=bx2+(a mod b)y2
+即 ax1+by1=bx2+(a-a/b*b)y2
+ax1+by1=ay2+b(x2-a/b*y2)
+所以x1=y2 y1= x2-a/b*y2
+x:
+输入a,b求ax+by=gcd(a,b)的一组解
+x1:
+输入a,mo求a的逆元(inverse element)
+扩欧求逆元
+ax≡1 (mod b)的解称为a 关于模b 的逆
+类似于实数运算中倒数的概念
+把它化为ax=by+1 -> ax-by=1
+1必须是gcd(a,b)的倍数，因此a,b互质，且有唯一解

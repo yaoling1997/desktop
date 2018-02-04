@@ -1,0 +1,19 @@
+lucas定理:
+设p为素数
+求C(m,n)mod p
+C(m,n)≡C(m0,n0)*C(m1,n1)*C(m2,n2)...C(mk,nk) (mod p)
+(mi,ni为m,n分解为p进制的i位的值)
+对于1<=j<=p-1都有C(p,j)=p/j*C(p-1,j-1)≡0 (mod p)
+于是(1+x)^p=1+C(p,1)x+...+C(p,p-1)x^(p-1)+x^p≡1+x^p (mod p)
+利用上述结果可知:(1+x)^a=(1+x)^a0((1+x)^p)^a1...((1+x)^(p^k))^ak
+=(1+x)^a0(1+x^p)^a1...(1+x^(p^k))^ak (mod p)
+对比两边x^b项的系数可得
+C(m,n)≡C(ak,bk)*C(ak-1,bk-1)...C(a0,b0) (mod p)
+具体怎么变的我也不太清楚
+反正最后就证出了Lucas
+如果要用的话请先预处理出p的阶乘
+若mi<ni直接为0
+
+x:
+给出n,m,p(n,m<=1e9,p<=1e5,且p是质数,不是质数就用CRT吧)
+求C(m,n)mod p

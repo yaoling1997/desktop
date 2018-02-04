@@ -1,0 +1,80 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cmath>
+#include<vector>
+using namespace std;
+const double eps= 1e-8,rad= 0.33333;
+struct point{
+	double x,y;
+};
+struct circle{
+	point c;
+	double r;
+};
+typedef point vec;
+int dcmp(double x){
+	if (fabs(x)<eps) return 0;
+	return x<0? -1:1;
+}
+vector<point> sol;
+vec operator +(vec a,vec b){a.x+= b.x;a.y+= b.y;return a;}
+vec operator -(vec a,vec b){a.x-= b.x;a.y-= b.y;return a;}
+vec operator *(double t,vec a){a.x*= t;a.y*= t;return a;}
+vec operator /(vec a,double t){a.x/= t;a.y/= t;return a;}
+bool operator ==(vec a,vec b){return !dcmp(a.x-b.x) && !dcmp(a.y-b.y);}
+bool operator <(vec a,vec b){return dcmp(a.x-b.x)<0 || (!dcmp(a.x-b.x) && dcmp(a.y-b.y)<0);}
+double cj(vec a,vec b){return a.x*b.y-a.y*b.x;}
+double dj(vec a,vec b){return a.x*b.x+a.y*b.y;}
+vec rot(vec a,double r){
+	vec c;
+	c.x= a.x*cos(r)-a.y*sin(r);
+	c.y= a.x*sin(r)+a.y*cos(r);
+	return c;
+}
+double length(vec a){return sqrt(dj(a,a));}
+point fp(point a,point b,point p){
+	vec v= b-a;
+	return a+dj(p-a,v)/dj(v,v)*v;
+}
+double dist1(point a,point b,point p){
+	return fabs(cj(b-a,p-a)/length(b-a));
+}
+int lci(point a,point b,circle c){
+	sol.clear();
+	point o= c.c,p= fp(a,b,o);
+	double r= c.r,d= dist1(a,b,o);
+	vec v= (b-a)/length(b-a);
+	if (dcmp(d-r)>0) return 0;
+	if (!dcmp(d-r)){
+		sol.push_back(p);
+		return 1;
+	}
+	double l= sqrt(r*r-d*d);
+	sol.push_back(p+l*v);
+	sol.push_back(p-l*v);
+	return 2;
+}
+int cci(circle c1,circle c2){
+	sol.clear();
+	if (dcmp(c1.r-c2.r)>0) swap(c1,c2);
+	point o1= c1.c,o2= c2.c;
+	vec v= (o2-o1)/length(o2-o1);
+	double r1= c1.r,r2= c2.r,d= length(o2-o1);
+	if (!dcmp(d)){
+		if (!dcmp(r1-r2)) return -1;
+		return 0;
+	}
+	if (dcmp(r2-r1-d)>0 || dcmp(r1+r2-d)<0)
+		return 0;
+	double da= acos((r1*r1+d*d-r2*r2)/(2*r1*d));
+	point p1= o1+r1*rot(v,da),p2= o1+r1*rot(v,-da);
+	sol.push_back(p1);
+	if (p1==p2)
+		return 1;
+	sol.push_back(p2);
+	return 2;
+}
+int main()
+{
+	
+}

@@ -1,0 +1,7 @@
+x:
+二维 凸包（convex hull）
+凸包是凸多边形
+
+UVa: 10256
+codeforces: 631E
+SGU: 129

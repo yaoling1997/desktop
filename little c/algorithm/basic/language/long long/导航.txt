@@ -1,0 +1,11 @@
+windows下和linux下 用long long定义一个变量a
+如果要用scanf和printf
+windows下要用"%I64d"
+linux下要用"%lld"
+如果怕被坑的话就用如下语句
+#ifdef WIN32
+#define LL "%I64d"
+#else
+#define LL "%lld"
+#endif
+反正我是被坑了一次

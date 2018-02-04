@@ -1,0 +1,2 @@
+x:
+typedef double a[maxn][maxn]

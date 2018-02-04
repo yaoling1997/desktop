@@ -1,0 +1,26 @@
+#include<cstdio>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int i,n,x,y,m;
+int random(int o){return rand()%o;}
+int main()
+{
+	freopen("1.in","w",stdout);
+	srand(time(NULL));
+	n= random(10)+300;
+	for (i= 1;i<=n;i++)
+		printf("%c",random(5)+97);
+	
+	n= 8;
+	//printf("aabaaaab");
+	printf("\n");
+	m= 1;
+	m= random(10)+100;
+	printf("%d\n",m);
+	for (i= 1;i<=m;i++){
+		x= random(n)+1;y= random(n)+1;
+		printf("%d %d\n",x,y);
+	}
+	return 0;
+}	

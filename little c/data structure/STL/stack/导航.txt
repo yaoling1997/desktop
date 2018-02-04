@@ -1,0 +1,1 @@
+STL中的stack没有clear函数

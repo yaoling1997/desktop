@@ -1,0 +1,66 @@
+#include<cstdio>
+#include<cstdlib>
+#include<vector>
+#include<cstring>
+using namespace std;
+const int maxn= 3001,oo= 99999;
+struct edge{
+	int from,to,cap,flow,cost;
+};
+vector<edge> edges;
+vector<int> g[maxn];
+int l[10*maxn],d[maxn],a[maxn],p[maxn];
+bool vis[maxn];
+int i,a1,a2,a3,a4,n,m,s,t,flow,cost;
+void addedge(int from,int to,int cap,int cost){
+	edges.push_back((edge){from,to,cap,0,cost});
+	edges.push_back((edge){to,from,0,0,-cost});
+	int m= edges.size();
+	g[from].push_back(m-2);
+	g[to].push_back(m-1);
+}
+bool spfa(){
+	memset(vis,0,sizeof(vis));
+	for (int i= 1;i<=n;i++) d[i]= oo;
+	d[s]= 0;vis[s]= 1;a[s]= oo;
+	int f= 0,r= 1;
+	l[1]= s;
+	while (f<r){
+		int u= l[++f],len= g[u].size();
+		vis[u]= 0;
+		for (int i= 0;i<len;i++){
+			edge& e= edges[g[u][i]];
+			if (d[u]+e.cost<d[e.to] && e.cap>e.flow){
+				d[e.to]= d[u]+e.cost;
+				a[e.to]= min(a[u],e.cap-e.flow);
+				p[e.to]= g[u][i];
+				if (!vis[e.to]){
+					vis[e.to]= 1;
+					l[++r]= e.to;
+				}
+			}
+		}
+	}
+	if (d[t]==oo) return 0;
+	flow+= a[t];
+	cost+= d[t]*a[t];
+	int u= t;
+	while (u!=s){
+		edges[p[u]].flow+= a[t];
+		edges[p[u]^1].flow-= a[t];
+		u= edges[p[u]].from;
+	}
+	return 1;
+}
+int main()
+{
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+	scanf("%d %d %d %d\n",&n, &m, &s, &t);
+	for (int i= 1;i<=m;i++){
+		scanf("%d %d %d %d",&a1, &a2, &a3, &a4);
+		addedge(a1,a2,a3,a4);
+	}
+	while (spfa());
+	printf("%d %d",flow, cost);
+}

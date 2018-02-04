@@ -1,0 +1,90 @@
+lcp[i,j]=min(height[k])(i+1<=k<=j)
+对于固定的后缀i,设z[i]为i的字典序
+证明随着z[j]增大,lcp(i,j)不增
+反证法
+设存在k,z[k]>z[j],且lcp(i,k)>lcp(i,j)
+那么i和k的第lcp(i,j)+1位字符是相同的
+由于j的lcp(i,j)+1位字符<=k的lcp(i,j)+1位字符
+j的lcp(i,j)+1位字符>=i的lcp(i,j)+1位字符
+所以i与j的lcp>=lcp(i,j)+1矛盾
+所以得证
+设rank[i]<rank[j]
+证明lcp(i,j)=min(height(rank[i]+1)...height(rank[j]))
+因为对于固定的i随着z[j]增大,lcp(i,j)不增
+所以任意z,lcp(i,j)<=lcp(i,z) rank[i]<=rank[z]<=rank[j]
+又因为若rank[i]<rank[z] lcp(i,z)<=height[rank[z]]
+所以lcp(i,j)<=min(height[rank[z]])
+又因为min(height[rank[z]])显然是所有rank[k]属于rank[i]~rank[j]
+的k的前缀
+所以lcp(i,j)>=min(height[rank[z]])
+所以lcp(i,j)=min(height[rank[z]])
+x:
+求后缀数组并查询询问的串是否出现
+st:文本串
+s:模式串
+len:文本串长度
+c:基数排序中每一位计数排序的桶
+sa：后缀数组
+x:谁排第几，swap以后重新计算名次
+y：第二维排序
+k:后面有多少个0
+求出后缀数组后
+find()二分后缀大小
+com()比较
+height[i],排名为i的串和排名为i-1的串的LCP
+m:询问
+x1:
+基于后缀数组的后缀的最长公共前缀
+细节也不少，还有精度问题
+（拿x1和x拍了好久，最后两程序结果一致了，就当是对的了）
+height[rank[i]]>=height[rank[i-1]]-1
+因为假设rank[k]==rank[i-1]-1
+那么rank[k+1]<rank[i]
+因为k+1为k删掉了第一个字符
+i为i-1删掉了第一个字符
+设i-1与k在第j个字符不同(i-1的更大),前j-1个相同
+那么i和k+1在j-1个字符不同,前j-2个相同
+所以k+1字典序在i的前面
+所以height[rank[i]]>=height[rank[i-1]]-1
+x2:
+两个串的最长公共子串
+就是把它们连在一起（中间要加一个不属于输入范围的字符，以防排序时出嘻嘻）
+
+多次求后缀数组时一定要清空X,Y数组,不然会跪
+还有要清空求RMQ的数组
+不要漏写m=p,m到后来可能会大于字符集的
+所以c数组的大小也要是maxn
+变量名为rank,评测机上可能会ce
+数组记得至少开到两倍字符串长度
+S的子串是S的某个后缀的前缀
+
+后缀数组重要结论:
+子串和某个后缀的前缀一一对应
+对于固定的i,i<j<k   (i,j,k是排名)
+则lcp(sa[i],sa[j])>=lcp(sa[i],sa[k])(反证法)
+同理可证对于固定的k,i<j<k,lcp(sa[i],sa[k])<=lcp(sa[j],sa[k])
+对于i<j,任意k,z属于[i,j]
+lcp(sa[i],sa[j])<=lcp(sa[k],sa[z])(用两次上面的结论)
+lcp(sa[i],sa[j])=min(height[k]) k属于[i+1,j]
+证明:
+1.证明lcp(sa[i],sa[j])<=min(height[k])
+对于任意k属于[i+1,j]
+height[k]= lcp(sa[k-1],sa[k])
+由于k-1属于[i,j],k属于[i,j]
+所以得证
+2.证明lcp(sa[i],sa[j])>=min(height[k])
+若height[k]为最小
+则height[k-1]>=height[k]
+height[k+1]>=height[k]
+即lcp(sa[k-1],sa[k-2])>=lcp(sa[k],sa[k-1])
+lcp(sa[k+1],sa[k])>=lcp(sa[k],sa[k-1])
+所以sa[k]到sa[k]+height[k]-1是sa[k-1]和sa[k+1]的前缀
+同时也是sa[k-2]的前缀
+由于传递性,sa[k]到sa[k]+height[k]-1是任意sa[k]的前缀
+
+BZOJ: 1031
+HDU: 5008 5442
+UVa: 11107
+POJ: 1743 3261 2774 3415 3693
+SPOJ: 705 220
+

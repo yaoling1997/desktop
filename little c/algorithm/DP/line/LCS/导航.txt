@@ -1,0 +1,24 @@
+设f[i][j]为A数组前i位,B数组前j位的最长公共子序列
+若Ai=Bj f[i][j]= f[i-1][j-1]+1　　(1)
+否则 f[i][j]= max(f[i-1][j],f[i][j-1])   (2)
+因为 f[i-1][j-1]<=f[i-1][j]<=f[i][j]
+又因为f[i][j]<=f[i-1][j-1]+1
+所以f[i-1][j]<=f[i-1][j-1]+1(f[i][j-1]同理)
+所以(1)(2)成立
+对于两个序列Xm Yn，Zk是它们的任意最长公共子序列。
+若Xm=Yn则Zk=Xm=Yn且Zk-1是Xm-1 Yn-1的一个LCS
+若Xm!=Yn,
+	若Zk!=Xm意味着Zk是Xm-1和Y的一个LCS
+	若Zk!=Yn意味着Zk是X和Yn-1的一个LCS
+所以当Xi=Yj时我们应该求解Xi-1与Yj-1的LCS，然后将Xi=Yj追加到这个LCS的末尾，就的到了Xi与Yj的LCS
+当Xi!=Yj时就要求解Xi与Yj-1和Xi-1与Yj的LCS并从中取最大值了
+
+重构最优解：
+重构最优解，递归输出
+i从m开始,j从n开始
+若Xi=Yj就跳到Xi-1,Yj-1(i--,j--)
+若Xi!=Yj 判一下f[i-1][j]和f[i][j-1]哪个大，然后决定怎么跳
+
+BZOJ: 2423
+
+
