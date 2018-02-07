@@ -1,0 +1,39 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<cmath>
+#define ll long long
+#define ld long double
+#define pb push_back
+#define mp make_pair
+using namespace std;
+const int maxn= 5e5,maxm=4e6;
+int c[maxn],a[maxm];
+int n,m;
+void prepare(){
+}
+int main()
+{
+#ifndef ONLINE_JUDGE	
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+#endif
+	scanf("%d%d",&n, &m);
+	for (int i=1;i<=n;i++)
+		scanf("%d",&c[i]);
+	prepare();
+	for (int tt=1;tt<=m;tt++){
+		int x,y,z;
+		scanf("%d%d",&x, &y, &z);
+		if (x==1){
+			replace(1,l,r,x,y+1);
+		}else {
+			ans=0;
+			get(1,l,r,x,y+1);
+			printf("%d\n",ans);
+		}
+	}
+	return 0;
+}
