@@ -1,0 +1,1 @@
+S是multiset<int>,S.erase(1)会删掉所有1
