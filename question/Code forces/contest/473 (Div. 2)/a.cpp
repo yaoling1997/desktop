@@ -1,0 +1,23 @@
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<cmath>
+#define ll long long
+#define ld long double
+#define pb push_back
+#define mp make_pair
+using namespace std;
+const int maxn= 5e5;
+int main()
+{
+#ifndef ONLINE_JUDGE	
+	freopen("1.in","r",stdin);
+	freopen("1.out","w",stdout);
+#endif
+	int n;
+	scanf("%d",&n);
+	printf("%s",(n&1)?"Ehab":"Mahmoud");
+	return 0;
+}
