@@ -1,0 +1,32 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<string>
+#include<cstring>
+using namespace std;
+const int N = 1003;
+int a[N];
+
+int main(){
+	freopen("1.in","r",stdin);
+	freopen("2.out","w",stdout);	
+    int n;
+    while(cin>>n){
+        for(int i =0  ;i < n;++i){          //????
+            cin>>a[i];
+        }
+        int ans = -1;                  //???????ans?-1
+        for(int i = 0 ; i< n;++i){          //??????a[i]
+            int low = a[i];              //?????low???a[i]
+            for(int j =  i ; j < n;++j){       //??i???????
+                if(low > a[j])            //??a[j] ? ???????????,????????a[j]
+                    low = a[j];
+                int temp = (j - i + 1) * low;      //??????temp ?????????
+                if(temp > ans)              
+                    ans = temp;
+            }
+        }
+        cout<<ans<<endl;
+    }
+return 0;
+}
